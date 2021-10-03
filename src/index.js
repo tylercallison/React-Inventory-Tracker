@@ -1,17 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import './styles/index.css';
-import App from './screens/App';
-import reportWebVitals from './reportWebVitals';
+//import { FirebaseProvider } from "hooks/firestoreContext";
+
+import App from "./screens/App.js";
+import Test2 from "./screens/Test2.js";
+import Test3 from "./screens/Test3.js";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  <BrowserRouter>
+    {/*<FirebaseProvider>*/}
+    <Switch>
+      <Route exact path="/" render={(props) => <App {...props} />} />
+      <Route path="/test2" render={(props) => <Test2 {...props} />} />
+      <Route path="/test3" render={(props) => <Test3 {...props} />} />
+      {/*<Redirect from="/" to="/index" />*/}
+    </Switch>
+    {/* </FirebaseProvider>*/}
+  </BrowserRouter>,
+  document.getElementById("root")
+);
