@@ -141,8 +141,7 @@ export const FirebaseProvider = ({ children }) => {
 
     return () => {
       unsubscribers.forEach(unsubscriber => {
-        // eslint-disable-next-line no-unused-expressions
-        unsubscriber
+        unsubscriber();
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
