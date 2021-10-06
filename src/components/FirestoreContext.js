@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import firebase from "../config"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { collection, doc, setDoc, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
@@ -115,8 +116,8 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
-  function isAdmin(userId) {
-    return orgDoc?.data()?.roles[userId] === "admin"
+  function getUserRole(userId) {
+    return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
   }
 
   function handleFirebaseErrors(error) {
