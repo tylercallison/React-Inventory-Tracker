@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import firebase from "../config"
+import "../config"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { collection, doc, setDoc, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
 
@@ -9,15 +9,15 @@ const db = getFirestore();
 const auth = getAuth();
 const FirebaseContext = createContext({})
 
-
 export function useFirebase() {
   return useContext(FirebaseContext)
 }
 
 export const FirebaseProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = React.useState(true);
+  const [currentUser, setCurrentUser] = React.useState();
   const [userDoc, setUserDoc] = React.useState();
   const [orgDoc, setOrgDoc] = React.useState();
+  const [inventoryData, setInventoryData] = React.useState([]);
 
   function firebaseRegister(email, password, firstNameValue, lastNameValue, orgId) {
     return new Promise((resolve, reject) => {
@@ -116,6 +116,21 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  function getTestInventoryData(numElements) {
+    const data = []
+    for (let i = 0; i < numElements; i++) {
+      data.push({
+        id: i,
+        title: "Sherbert",
+        size: "Pint",
+        units: 45,
+        price: 12,
+        outgoingUnits: 45
+      })
+    }
+    return data;
+  }
+
   function getUserRole(userId) {
     return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
   }
@@ -124,34 +139,35 @@ export const FirebaseProvider = ({ children }) => {
     console.log(error)
   }
 
-  React.useEffect(() => {
-    const unsubscribers = [];
-    const authUnsubscriber = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      if (user) {
-        const userDataReturn = await watchUserData(user);
-        const orgDataReturn = await watchOrgData(userDataReturn.document);
+  // React.useEffect(() => {
+  //   const unsubscribers = [];
+  //   const authUnsubscriber = onAuthStateChanged(auth, (user) => {
+  //     setCurrentUser(user);
+  //     if (user) {
+  //       const userDataReturn = watchUserData(user);
+  //       const orgDataReturn = watchOrgData(userDataReturn.document);
 
-        unsubscribers.push(userDataReturn.unsubscriber)
-        unsubscribers.push(orgDataReturn.unsubscriber)
-        unsubscribers.push(authUnsubscriber)
+  //       unsubscribers.push(userDataReturn.unsubscriber)
+  //       unsubscribers.push(orgDataReturn.unsubscriber)
+  //       unsubscribers.push(authUnsubscriber)
 
-      }
-    })
+  //     }
+  //   })
 
-    return () => {
-      unsubscribers.forEach(unsubscriber => {
-        unsubscriber();
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  //   return () => {
+  //     unsubscribers.forEach(unsubscriber => {
+  //       unsubscriber();
+  //     })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   const firebaseData = {
     currentUser,
     firebaseRegister,
     userDoc,
     orgDoc,
+    getTestInventoryData
   }
 
   return (
