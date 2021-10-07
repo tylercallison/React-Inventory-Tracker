@@ -8,18 +8,10 @@ image: node:10.15.3
 pipelines:
   branches:
     dev:
-      - parallel:
-          - step:
-              name: Build and Test
-              caches:
-                - node
-              script:
-                - npm install
-                - npm test
-          - step:
-              name: Code linting
-              script:
-                - npm install eslint
-                - npx eslint .
-              caches:
-                - node
+      - step:
+          name: Build and Test
+          caches:
+            - node
+          script:
+            - npm install
+            - npm test
