@@ -6,11 +6,20 @@
 image: node:10.15.3
 
 pipelines:
-  default:
-    - step:
-        name: Build and Test
-        caches:
-          - node
-        script:
-          - npm install
-          - npm test
+  branches:
+    dev:
+      - parallel:
+          - step:
+              name: Build and Test
+              caches:
+                - node
+              script:
+                - npm install
+                - npm test
+          - step:
+              name: Code linting
+              script:
+                - npm install eslint
+                - npx eslint .
+              caches:
+                - node
