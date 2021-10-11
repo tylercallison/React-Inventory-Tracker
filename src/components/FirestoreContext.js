@@ -18,6 +18,7 @@ export const FirebaseProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = React.useState(true);
   const [userDoc, setUserDoc] = React.useState();
   const [orgDoc, setOrgDoc] = React.useState();
+  const [issueData, setIssueData] = React.useState([]);
 
   function firebaseRegister(email, password, firstNameValue, lastNameValue, orgId) {
     return new Promise((resolve, reject) => {
@@ -151,7 +152,7 @@ export const FirebaseProvider = ({ children }) => {
     currentUser,
     firebaseRegister,
     userDoc,
-    orgDoc,
+    orgDoc
   }
 
   return (
