@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import PropTypes from 'prop-types'
 
 import "react-datepicker/dist/react-datepicker.css";
 
