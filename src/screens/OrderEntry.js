@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import * as ReactBootStrap from "react-bootstrap"
 import GridLayout from 'react-grid-layout';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
+import DatePicker from '../components/DatePicker.js'
+
 
 export default function OrderEntry() {
     const orderExamples = [
-        {lineNumber: "1", itemName: "Vanilla", size: "1 qt", quantity: "1", estDelivery: "11/25/2021", lineTotal: "$5.00"},
-        {lineNumber: "2", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: "11/25/2021", lineTotal: "$20.00"},
-        {lineNumber: "3", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: "11/25/2021", lineTotal: "$20.00"},
-        {lineNumber: "4", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: "11/25/2021", lineTotal: "$20.00"},
-        {lineNumber: "5", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: "11/25/2021", lineTotal: "$20.00"}
+        {lineNumber: "1", itemName: "Vanilla", size: "1 qt", quantity: "1", estDelivery: new Date("11/25/2021"), lineTotal: "$5.00"},
+        {lineNumber: "2", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00"},
+        {lineNumber: "3", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00"},
+        {lineNumber: "4", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00"},
+        {lineNumber: "5", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00"}
     ]
-
-    const[selectedDate, setSelectedDate] = useState(null)
 
     const layout = [
         {i: 'orderTable', x: 0, y: 0, w: 1, h: 2},
@@ -24,7 +23,7 @@ export default function OrderEntry() {
             <tr key = {index}>
                 <td>{order.lineNumber}</td>
                 <td>
-                    <input list="item_names" name="input_normal"/>
+                    <input list="item_names" name="input_normal" defaultValue={order.itemName}/>
                     <datalist id="item_names">
                         <option value="Vanilla"/>
                         <option value="Chocolate"/>
@@ -40,18 +39,10 @@ export default function OrderEntry() {
                     </select>
                 </td>
                 <td>
-                    <input list="quantityList" name="input_normal"/>
-                    <datalist id="quantityList">
-                        <option value="1"/>
-                        <option value="2"/>
-                        <option value="3"/>
-                    </datalist>
+                    <input defaultValue = {order.quantity}/>
                 </td>
                 <td>
-                    <DatePicker 
-                        selected = {selectedDate} 
-                        onChange = {date => setSelectedDate(date)}
-                    />
+                    <DatePicker initialDate = {order.estDelivery}/>
                 </td>
                 <td>{order.lineTotal}</td>
             </tr>
@@ -59,13 +50,13 @@ export default function OrderEntry() {
     }
     return (
         <div>
-             <GridLayout className="layout" layout={layout} cols={2} rowHeight={100}>
+            {/*<GridLayout className="layout" layout={layout} cols={2} rowHeight={100}>*/}
                 <div key="orderTable">
                     <ReactBootStrap.Table striped bordered hover responsive="m">
                         <thead>
                             <tr>
                             <th>#</th>
-                            <th>Item Name</th>
+                            <th class="vertical-align: middle">Item Name</th>
                             <th>Size</th>
                             <th>Quantity</th>
                             <th>Est. Delivery</th>
@@ -78,7 +69,7 @@ export default function OrderEntry() {
                         </tbody>
                     </ReactBootStrap.Table>
                 </div>
-        </GridLayout>
+        {/*</GridLayout>*/}
       </div>
     )
 }
