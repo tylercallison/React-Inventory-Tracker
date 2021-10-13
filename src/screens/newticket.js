@@ -1,10 +1,15 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input, FormTest } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 function NewTicket() {
     return (
         <div className="container">
             <h1>Submit a ticket</h1>
+            <div className="text-center" style={{ borderRadius: "5px", backgroundColor: "#31d2f2", color: "white", padding: "20px" }}>
+                <h4>
+                    Questions, comments, concerns? Need to track a shipment? Having issues with your order? Submit a ticket and we will get back to you as soon as possible!
+                </h4>
+            </div>
             <Form>
                 <FormGroup>
                     <Label for="subject">Subject</Label>
@@ -26,7 +31,7 @@ function NewTicket() {
                 </FormGroup>
                 <FormGroup>
                     <br />
-                    <Button color="success">Submit</Button>
+                    <Button color="info">Submit</Button>
                 </FormGroup>
             </Form>
         </div>
