@@ -48,28 +48,84 @@ export default function OrderEntry() {
             </tr>
         )
     }
+
     return (
         <div>
+            <div responsive= "m" style = {{"display" : 'flex', justifyContent : 'center'}}>
+                <div class="card" style = {{"width" : '50%'}}>
+                    <div class="card-body">
+                        <div class="container-lg">
+                            <div class = "row" style = {{justifyContent : 'space-between'}}>
+                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
+                                    <p class="card-text"><b>Order ID: </b></p>
+                                    <input list="order_id" name="input_normal"/>
+                                </div>
+                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
+                                    <p class="card-text"><b>Customer: </b></p>
+                                    <input list="order_id" name="input_normal"/>
+                                </div>
+                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
+                                    <p class="card-text"><b>Customer Status: </b></p>
+                                    <input list="order_id" name="input_normal"/>
+                                </div>
+                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
+                                    <p class="card-text"><b>Order Date: </b></p>
+                                    <input list="order_id" name="input_normal"/>
+                                </div>
+                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
+                                    <p class="card-text"><b>Expected Delivery: </b></p>
+                                    <input list="order_id" name="input_normal"/>
+                                </div>
+                                
+                            </div>
+                        </div>
+                       
+                        
+                    </div>
+                </div>
+
+                <div class="card" style = {{"width" : '50%'}} >
+                    <div class="card-body">
+                        <p class="card-text"><b>Billing address: </b></p>
+                        <p class="card-text"><b>Address 2: </b></p>
+                        <p class="card-text"><b>City: </b></p>
+                        <p class="card-text"><b>State: </b></p>
+                        <p class="card-text"><b>Post Code: </b></p>
+                        <p class="card-text"><b>Country: </b></p>
+                    </div>
+                </div>
+                <div class="card" style = {{"width" : '50%'}} >
+                    <div class="card-body">
+                        <p class="card-text"><b>Shipping address: </b></p>
+                        <p class="card-text"><b>Address 2: </b></p>
+                        <p class="card-text"><b>City: </b></p>
+                        <p class="card-text"><b>State: </b></p>
+                        <p class="card-text"><b>Post Code: </b></p>
+                        <p class="card-text"><b>Country: </b></p>
+                    </div>
+                </div>
+            </div>
+
             {/*<GridLayout className="layout" layout={layout} cols={2} rowHeight={100}>*/}
-                <div key="orderTable">
-                    <ReactBootStrap.Table striped bordered hover responsive="m">
-                        <thead>
-                            <tr>
-                            <th>#</th>
-                            <th class="vertical-align: middle">Item Name</th>
-                            <th>Size</th>
-                            <th>Quantity</th>
-                            <th>Est. Delivery</th>
-                            <th>Line Total</th>
+                    <div key="orderTable">
+                        <ReactBootStrap.Table striped bordered hover responsive="m">
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>Item Name</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Est. Delivery</th>
+                                <th>Line Total</th>
                             </tr>
                         </thead>
-                        
+                            
                         <tbody>
                             {orderExamples.map(renderOrder)}
                         </tbody>
                     </ReactBootStrap.Table>
                 </div>
-        {/*</GridLayout>*/}
-      </div>
+            {/*</GridLayout>*/}
+        </div>
     )
 }
