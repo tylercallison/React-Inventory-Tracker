@@ -54,54 +54,173 @@ export default function OrderEntry() {
             <div responsive= "m" style = {{"display" : 'flex', justifyContent : 'center'}}>
                 <div class="card" style = {{"width" : '50%'}}>
                     <div class="card-body">
-                        <div class="container-lg">
-                            <div class = "row" style = {{justifyContent : 'space-between'}}>
-                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
-                                    <p class="card-text"><b>Order ID: </b></p>
-                                    <input list="order_id" name="input_normal"/>
-                                </div>
-                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
-                                    <p class="card-text"><b>Customer: </b></p>
-                                    <input list="order_id" name="input_normal"/>
-                                </div>
-                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
-                                    <p class="card-text"><b>Customer Status: </b></p>
-                                    <input list="order_id" name="input_normal"/>
-                                </div>
-                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
-                                    <p class="card-text"><b>Order Date: </b></p>
-                                    <input list="order_id" name="input_normal"/>
-                                </div>
-                                <div class = "col-sm" style = {{justifyContent : 'space-evenly'}}> 
-                                    <p class="card-text"><b>Expected Delivery: </b></p>
-                                    <input list="order_id" name="input_normal"/>
-                                </div>
-                                
-                            </div>
-                        </div>
-                       
-                        
+                       <table class = "table" columnGap = '5px'>
+                           <tbody>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Order ID:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Customer:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Customer Status:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Order Date:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Expected Delivery:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                           </tbody>
+                       </table>
                     </div>
                 </div>
 
                 <div class="card" style = {{"width" : '50%'}} >
                     <div class="card-body">
-                        <p class="card-text"><b>Billing address: </b></p>
-                        <p class="card-text"><b>Address 2: </b></p>
-                        <p class="card-text"><b>City: </b></p>
-                        <p class="card-text"><b>State: </b></p>
-                        <p class="card-text"><b>Post Code: </b></p>
-                        <p class="card-text"><b>Country: </b></p>
+                       <table class = "table" columnGap = '5px'>
+                           <tbody>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Billing Address:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Address 2:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>City:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>State:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Post Code:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Country:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                           </tbody>
+                       </table>
                     </div>
                 </div>
                 <div class="card" style = {{"width" : '50%'}} >
                     <div class="card-body">
-                        <p class="card-text"><b>Shipping address: </b></p>
-                        <p class="card-text"><b>Address 2: </b></p>
-                        <p class="card-text"><b>City: </b></p>
-                        <p class="card-text"><b>State: </b></p>
-                        <p class="card-text"><b>Post Code: </b></p>
-                        <p class="card-text"><b>Country: </b></p>
+                       <table class = "table" columnGap = '5px'>
+                           <tbody>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Shipping Address:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Address 2:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>City:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>State:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Post Code:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                   <td>
+                                        <p class="card-text"><b>Country:</b></p>
+                                   </td>
+                                   <td>
+                                        <input list="order_id" name="input_normal"/>
+                                   </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan = "2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                Same as billing?
+                                            </label>
+                                        </div>
+                                   </td>
+                                </tr>
+                           </tbody>
+                       </table>
                     </div>
                 </div>
             </div>
