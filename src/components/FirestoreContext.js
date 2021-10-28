@@ -144,39 +144,20 @@ export const FirebaseProvider = ({ children }) => {
       if (orgId) {
         console.log("Getting trouble tickets...")
         if (lowerTimestamp && upperTimestamp) {
-          const troubleTicketsReturn = await getDocs(query(collection("tickets", doc(db, "organizations", orgId)), where("reportTimestamp", ">=", lowerTimestamp), where("reportTimestamp", "<=", upperTimestamp)))
+          const troubleTicketsReturn = await getDocs(query(collection(db, "organization", orgId, "tickets"), where("reportTimestamp", ">=", lowerTimestamp), where("reportTimestamp", "<=", upperTimestamp)))
+          // console.log("Size: " + troubleTicketsReturn.size)
           troubleTicketsReturn.forEach((ticket) => {
-            if (ticket) {
-              console.log("Updating trouble tickets...")
-              setUserDoc(ticket)
-              resolve(ticket)
-            } else {
-              reject('Get trouble ticket failed. Trouble tickets empty')
-            }
-          }, (err) => {
-            if (err) {
-              reject('Get trouble ticket data failed. Failed to get data from server')
-              handleFirebaseErrors(err)
-              console.log(err)
-            }
-          })
+            console.log(ticket)
+          });
+          resolve(troubleTicketsReturn);
         } else {
-          const troubleTicketsReturn = await getDocs(query(collection("tickets", doc(db, "organizations", orgId))))
+          const troubleTicketsReturn = await getDocs(query(collection(db, "organization", orgId, "tickets")))
+          // console.log("Size: " + troubleTicketsReturn.size)
           troubleTicketsReturn.forEach((ticket) => {
-            if (ticket) {
-              console.log("Updating trouble tickets...")
-              setUserDoc(ticket)
-              resolve(ticket)
-            } else {
-              reject('Get trouble ticket failed. Trouble tickets empty')
-            }
-          }, (err) => {
-            if (err) {
-              reject('Get trouble ticket data failed. Failed to get data from server')
-              handleFirebaseErrors(err)
-              console.log(err)
-            }
-          })
+            console.log(ticket.data())
+          });
+          // console.log(troubleTicketsReturn);
+          resolve(troubleTicketsReturn);
         }
       } else {
         reject('Get trouble ticket data failed. User empty')
@@ -260,7 +241,8 @@ export const FirebaseProvider = ({ children }) => {
     firebaseRegister,
     userDoc,
     orgDoc,
-    getTestInventoryData
+    getTestInventoryData,
+    getTroubleTickets
   }
 
   return (
