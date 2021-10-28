@@ -17,6 +17,7 @@ export const FirebaseProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = React.useState();
   const [userDoc, setUserDoc] = React.useState();
   const [orgDoc, setOrgDoc] = React.useState();
+  const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
 
   function firebaseRegister(email, password, firstNameValue, lastNameValue, orgId) {
