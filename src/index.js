@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import './styles/index.css';
 import { FirebaseProvider } from "./components/FirestoreContext";
@@ -9,6 +10,11 @@ import App from "./screens/App.js";
 import Test2 from "./screens/Test2.js";
 import Test3 from "./screens/Test3.js";
 import TroubleTicketManagement from "./screens/TroubleTicketManagement";
+import NewTicket from "./screens/newticket.js";
+import InventorySystem from "./screens/InventorySystem";
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 ReactDOM.render(
 
@@ -19,6 +25,8 @@ ReactDOM.render(
         <Route path="/test2" render={(props) => <Test2 {...props} />} />
         <Route path="/test3" render={(props) => <Test3 {...props} />} />
         <Route path="/TroubleTicketManagement" render={(props) => <TroubleTicketManagement {...props} />} />
+        <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
+        <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
         <Route render={() => <Redirect to="/" />} />
         {/*<Redirect from="/" to="/index" />*/}
       </Switch>
