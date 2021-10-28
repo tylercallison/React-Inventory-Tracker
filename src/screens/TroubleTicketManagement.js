@@ -3,27 +3,10 @@ import { Card, Container, Button } from "react-bootstrap";
 import '../styles/TroubleTicketManagement.css';
 
 export default function TroubleTicketManagement(){
+    
+    const [sidebarElements, setSidebarElements] = React.useState([]);
+    const [mainElement, setMainElement] = React.useState([]);
 
-    let issues = {
-        author: 'Cole',
-        problemStatus: 'unsolved',
-        dateReported: 'Oct 9th 2021',
-        dateResolved: null,
-        issueName: 'Info not accepted',
-        issueType: 'order entry',
-        issueSummary: 'I cant input a customers information'
-    }  
-    
-    let curr = {
-        author: 'Tyler',
-        problemStatus: 'unsolved',
-        dateReported: 'Oct 10th 2021',
-        dateResolved: null,
-        issueName: 'Rocky Road Out of Stock',
-        issueType: 'Inventory',
-        issueSummary: 'Rocky Road has ran out of stock. There is currently an order for 5 pints of Rocky Road that cannot be fulfilled due to lack of inventory.'
-    }
-    
     function genReport(){
         /*
         will create and download to device a pdf of a statistical summary report including
@@ -32,76 +15,75 @@ export default function TroubleTicketManagement(){
         */
     }
 
-    return(
-        <div>
-            <div className='IssueList'>
-                <Container>
-                    <Card border='info' className='TicketCard'>
-                        <Card.Body>
-                            <Card.Title>{ issues.issueName}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted' >{ issues.dateReported }</Card.Subtitle>
-                            <Card.Text>{ issues.author }</Card.Text>
-                            <Card.Text>{ issues.issueType }</Card.Text>
-                        </Card.Body>
-                    </Card> 
-                </Container>
-                <Container>
-                    <Card border='info' text='white' bg='info' className='TicketCard'>
-                        <Card.Body>
-                            <Card.Title>{ curr.issueName}</Card.Title>
-                            <Card.Subtitle style={{color: "black"}}>{ curr.dateReported }</Card.Subtitle>
-                            <Card.Text>{ curr.author }</Card.Text>
-                            <Card.Text>{ curr.issueType }</Card.Text>
-                        </Card.Body>
-                    </Card> 
-                </Container>
+    React.useEffect(() => {
+        let issues = [];
+        for(let i = 0; i < 5; i++){
+            issues.push({
+                issueName: "Problem " + (i+1),
+                dateReported: "10/23/2020",
+                author: "Tyler",
+                issueType: "Major",
+            })
+        }
+        let mainIssue = [];
+        mainIssue.push({
+            issueName: "Rocky Road is out of stock",
+            dateReported: "10/27/2021",
+            author: "Cole",
+            issueSummary: "A previous order claimed the last of the rocky road from the inventory. Rocky Road is now out of stock and we need to replenish the inventory.",
+        })
+        genSideBar(issues);
+        genMainCard(mainIssue);
+    }, [])
 
-                <Container>
+    function genSideBar(issueList){
+        let cards = [];
+        issueList.map((data, key)=> {
+            cards.push(
+                <Container id={key}>
                     <Card border='info' className='TicketCard'>
                         <Card.Body>
-                            <Card.Title>{ issues.issueName}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>{ issues.dateReported }</Card.Subtitle>
-                            <Card.Text>{ issues.author }</Card.Text>
-                            <Card.Text>{ issues.issueType }</Card.Text>
+                            <Card.Title>{data.issueName}</Card.Title>
+                            <Card.Subtitle className='mb-2 text-muted'>{data.dateReported}</Card.Subtitle>
+                            <Card.Text>{data.author}</Card.Text>
+                            <Card.Text>{data.issueType}</Card.Text>
                         </Card.Body>
-                    </Card> 
+                    </Card>
                 </Container>
+            )
+        })
+        console.log(cards);
+        setSidebarElements(cards);
+    }
 
-                <Container>
-                    <Card border='info' className='TicketCard'>
-                        <Card.Body>
-                            <Card.Title>{ issues.issueName}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>{ issues.dateReported }</Card.Subtitle>
-                            <Card.Text>Issue Author: { issues.author }</Card.Text>
-                            <Card.Text>Issue Type: { issues.issueType }</Card.Text>
-                        </Card.Body>
-                    </Card> 
-                </Container>
-
-                <Container>
-                    <Card border='info' className='TicketCard'>
-                        <Card.Body>
-                            <Card.Title>{ issues.issueName}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>{ issues.dateReported }</Card.Subtitle>
-                            <Card.Text>{ issues.author }</Card.Text>
-                            <Card.Text>{ issues.issueType }</Card.Text>
-                        </Card.Body>
-                    </Card> 
-                </Container>
-            </div>
-            <div className='CurrentIssue'>
+    function genMainCard(mainIssue){
+        let mainCard;
+        mainIssue.map((data,key)=>{
+            mainCard =[
                 <Card>
                     <Card.Header>
-                        <Card.Title>{curr.issueName}</Card.Title>
-                        <Card.Subtitle className='text-muted'>Date Reported: {curr.dateReported}</Card.Subtitle>
+                        <Card.Title>{data.issueName}</Card.Title>
+                        <Card.Subtitle className='text-muted'>Date Reported: {data.dateReported}</Card.Subtitle>
                     </Card.Header>
                     <Card.Body>
-                        <Card.Text >Issue Author: {curr.author}</Card.Text>
-                        <Card.Text>{curr.issueSummary}</Card.Text>
+                        <Card.Text >Issue Author: {data.author}</Card.Text>
+                        <Card.Text>{data.issueSummary}</Card.Text>
                         <Card.Text></Card.Text>
                     </Card.Body>
                 </Card>
+            ]
+        })
+        console.log(mainCard);
+        setMainElement(mainCard);
+    }
 
+    return(
+        <div>
+            <div className='IssueList'>
+                {sidebarElements}
+            </div>
+            <div className='CurrentIssue'>
+                {mainElement}
                 <Button style={{}}>Generate Report</Button>
             </div>
         </div>
