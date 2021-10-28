@@ -9,7 +9,7 @@ import reportWebVitals from './reportWebVitals';
 import App from "./screens/App.js";
 import Test2 from "./screens/Test2.js";
 import Test3 from "./screens/Test3.js";
-import NewTicket from "./screens/newticket.js";
+import NewTicket from "./screens/newTicket.js";
 import InventorySystem from "./screens/InventorySystem";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
