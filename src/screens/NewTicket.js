@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form } from 'react-bootstrap';
 
 function NewTicket() {
     return (
@@ -11,28 +11,29 @@ function NewTicket() {
                 </h4>
             </div>
             <Form>
-                <FormGroup>
-                    <Label for="subject">Subject</Label>
-                    <Input type="text" name="subject" id="subject" placeholder="Ticket Subject" />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="type">Subject</Label>
-                    <Input type="select" name="type" id="type">
+                <Form.Group className="mb-3">
+                    <Form.Label>Subject:</Form.Label>
+                    <Form.Control type="email" placeholder="Subject" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Type of Issue:</Form.Label>
+                    <Form.Select aria-label="Default select example">
+                        <option>Select an issue:</option>
                         <option>General</option>
                         <option>Order Entry</option>
                         <option>Inventory</option>
                         <option>Shipment Tracking</option>
                         <option>Other</option>
-                    </Input>
-                </FormGroup>
-                <FormGroup>
-                    <Label for="description">Problem Description</Label>
-                    <Input type="textarea" name="description" id="description" placeholder="Tell us what you want here." />
-                </FormGroup>
-                <FormGroup>
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Describe your issue:</Form.Label>
+                    <Form.Control as="textarea" rows={5} />
+                </Form.Group>
+                <Form.Group>
                     <br />
                     <Button color="info">Submit</Button>
-                </FormGroup>
+                </Form.Group>
             </Form>
         </div>
     );
