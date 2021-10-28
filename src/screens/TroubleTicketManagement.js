@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Container, Button } from "react-bootstrap";
-import '../styles/TroubleTicket.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/TroubleTicketManagement.css';
 
 export default function TroubleTicketManagement(){
 
