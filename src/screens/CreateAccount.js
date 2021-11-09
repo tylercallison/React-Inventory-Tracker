@@ -1,4 +1,3 @@
-import { signInWithEmailAndPassword } from '@firebase/auth';
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useFirebase } from '../components/FirestoreContext';
