@@ -19,6 +19,7 @@ export const FirebaseProvider = ({ children }) => {
   const [orgDoc, setOrgDoc] = React.useState();
   const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
+  const [ShipmentData, setShipmentData] = React.useState([]);
 
   function firebaseRegister(email, password, firstNameValue, lastNameValue, orgId) {
     return new Promise((resolve, reject) => {
@@ -132,6 +133,23 @@ export const FirebaseProvider = ({ children }) => {
     return data;
   }
 
+  function getTestShipmentData(numElements) {
+    const data = []
+    for (let i = 1; i <= numElements; i++) {
+      data.push({
+        orderId: i,
+        customer: "BillyBob",
+        orderPlacedTimestamp: "10/07/2021, 19:02:00 UTC-8:00",
+        status: "in-progress",
+        expectedDeliveryDate: "November 10th, 2021",
+        address: "5500 Campanile Drive, San Diego, CA, 92115",
+        billingAddress: "5500 Campanile Drive, San Diego, CA, 92115 ",
+        truck: (i % 3)
+      })
+    }
+    return data;
+  }
+
   function getUserRole(userId) {
     return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
   }
@@ -168,7 +186,8 @@ export const FirebaseProvider = ({ children }) => {
     firebaseRegister,
     userDoc,
     orgDoc,
-    getTestInventoryData
+    getTestInventoryData,
+    getTestShipmentData
   }
 
   return (
