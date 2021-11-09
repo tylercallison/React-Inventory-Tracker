@@ -271,7 +271,7 @@ export const FirebaseProvider = ({ children }) => {
         unsubscribers.push(authUnsubscriber)
 
       } else {
-        if (window.location.pathname !== "/login" || window.location.pathname !== "/createAccount") {
+        if (window.location.pathname !== "/login" && window.location.pathname !== "/createAccount") {
           // console.log(window.location.pathname)
           window.location.assign("/login");
         }
