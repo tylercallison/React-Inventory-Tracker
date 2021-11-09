@@ -12,6 +12,7 @@ import Test3 from "./screens/Test3.js";
 import NewTicket from "./screens/NewTicket.js";
 import TroubleTicketManagement from "./screens/TroubleTicketManagement";
 import InventorySystem from "./screens/InventorySystem";
+import ShipmentTracking from "./screens/ShipmentTracking";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,6 +26,7 @@ ReactDOM.render(
         <Route path="/test2" render={(props) => <Test2 {...props} />} />
         <Route path="/test3" render={(props) => <Test3 {...props} />} />
         <Route path="/TroubleTicketManagement" render={(props) => <TroubleTicketManagement {...props} />} />
+        <Route path="/ShipmentTracking" render={(props) => <ShipmentTracking {...props} />} />
         <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
         <Route render={() => <Redirect to="/" />} />
