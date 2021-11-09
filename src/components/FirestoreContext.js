@@ -186,6 +186,7 @@ export const FirebaseProvider = ({ children }) => {
     firebaseRegister,
     userDoc,
     orgDoc,
+    getTestInventoryData,
     getTestShipmentData
   }
 
