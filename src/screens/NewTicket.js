@@ -5,7 +5,7 @@ import { serverTimestamp } from "firebase/firestore";
 
 function NewTicket() {
 
-    const { submitNewTicket } = useFirebase()
+    const { submitNewTicket, slugify } = useFirebase()
 
     return (
         <div className="container">
@@ -52,7 +52,7 @@ function NewTicket() {
                             description: document.getElementById("description").value,
                             issueName: document.getElementById("subject").value,
                             problemStatus: "unresolved",
-                            problemType: document.getElementById("issue-type").value,
+                            problemType: slugify(document.getElementById("issue-type").value),
                             reportTimestamp: serverTimestamp(),
                             resolutionDescription: "",
                             resolvedTimestamp: "",

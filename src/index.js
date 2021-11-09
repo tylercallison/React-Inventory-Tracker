@@ -10,6 +10,8 @@ import App from "./screens/App.js";
 import NewTicket from "./screens/NewTicket.js";
 import TroubleTicketManagement from "./screens/TroubleTicketManagement";
 import InventorySystem from "./screens/InventorySystem";
+import Login from "./screens/Login";
+import CreateAccount from "./screens/CreateAccount";
 
 ReactDOM.render(
 
@@ -17,9 +19,11 @@ ReactDOM.render(
     <FirebaseProvider>
       <Switch>
         <Route exact path="/" render={(props) => <App {...props} />} />
-        <Route path="/TroubleTicketManagement" render={(props) => <TroubleTicketManagement {...props} />} />
-        <Route path="/newticket" render={(props) => <NewTicket {...props} />} />
+        <Route path="/troubleTicketManagement" render={(props) => <TroubleTicketManagement {...props} />} />
+        <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
+        <Route path="/login" render={(props) => <Login {...props} />} />
+        <Route path="/createAccount" render={(props) => <CreateAccount {...props} />} />
         <Route render={() => <Redirect to="/" />} />
         {/*<Redirect from="/" to="/index" />*/}
       </Switch>

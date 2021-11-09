@@ -1,6 +1,5 @@
-// eslint-disable-next-line no-unused-vars
 import "../config"
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, setDoc, getDoc, getFirestore, onSnapshot, query, addDoc, getDocs, where } from "firebase/firestore";
 
 import React, { useContext, createContext } from 'react';
@@ -21,6 +20,22 @@ export const FirebaseProvider = ({ children }) => {
   const [inventoryData, setInventoryData] = React.useState([]);
   const [tickets, setTickets] = React.useState([]);
 
+  function slugify(string) {
+    return string
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "");
+  }
+
+  function firebaseSignIn(email, password) {
+    return signInWithEmailAndPassword(email, password)
+  }
+
   function firebaseRegister(email, password, firstName, lastName, orgId) {
     return new Promise((resolve, reject) => {
       if (email === "" || password === "" || firstName === "" || lastName === "" || orgId === "") {
@@ -35,7 +50,7 @@ export const FirebaseProvider = ({ children }) => {
       lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
       orgId = orgId.trim();
 
-      getDoc(doc(collection(db, "organizations"), orgId)).then((response) => {
+      getDoc(doc(collection(db, "organization"), orgId)).then((response) => {
         if (response.exists) {
           email = email.toLowerCase();
           createUserWithEmailAndPassword(auth, email, password).then((response) => {
@@ -181,7 +196,7 @@ export const FirebaseProvider = ({ children }) => {
     return new Promise((resolve, reject) => {
       // console.log("attempting to get org data")
       if (orgId) {
-        const orgDocumentListener = onSnapshot(doc(db, 'organizations', orgId), (orgDocument) => {
+        const orgDocumentListener = onSnapshot(doc(db, 'organization', orgId), (orgDocument) => {
           if (orgDocument) {
             console.log("Updating org data...")
             setOrgDoc(orgDocument)
@@ -225,28 +240,33 @@ export const FirebaseProvider = ({ children }) => {
     console.log(error)
   }
 
-  // React.useEffect(() => {
-  //   const unsubscribers = [];
-  //   const authUnsubscriber = onAuthStateChanged(auth, (user) => {
-  //     setCurrentUser(user);
-  //     if (user) {
-  //       const userDataReturn = watchUserData(user);
-  //       const orgDataReturn = watchOrgData(userDataReturn.document);
+  React.useEffect(() => {
+    const unsubscribers = [];
+    const authUnsubscriber = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      if (user) {
+        const userDataReturn = watchUserData(user);
+        const orgDataReturn = watchOrgData(userDataReturn.document);
 
-  //       unsubscribers.push(userDataReturn.unsubscriber)
-  //       unsubscribers.push(orgDataReturn.unsubscriber)
-  //       unsubscribers.push(authUnsubscriber)
+        unsubscribers.push(userDataReturn.unsubscriber)
+        unsubscribers.push(orgDataReturn.unsubscriber)
+        unsubscribers.push(authUnsubscriber)
 
-  //     }
-  //   })
+      } else {
+        if (window.location.pathname !== "/login") {
+          // console.log(window.location.pathname)
+          window.location.assign("/login");
+        }
+      }
+    })
 
-  //   return () => {
-  //     unsubscribers.forEach(unsubscriber => {
-  //       unsubscriber();
-  //     })
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
+    return () => {
+      unsubscribers.forEach(unsubscriber => {
+        unsubscriber();
+      })
+    }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const firebaseData = {
     currentUser,
@@ -255,7 +275,9 @@ export const FirebaseProvider = ({ children }) => {
     orgDoc,
     getTestInventoryData,
     getTroubleTickets,
-    submitNewTicket
+    submitNewTicket,
+    slugify,
+    firebaseSignIn
   }
 
   return (
