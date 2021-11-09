@@ -116,6 +116,61 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  function getTestOrderEntryData(numElements) {
+    const data = []
+    for (let i = 0; i < numElements; i++) {
+      data.push({
+        id: i,
+        lineNumber: i,
+        itemName: "Chocolate",
+        size: "1 pt",
+        quantity: "1",
+        estDelivery: new Date("11/25/2021"), 
+        lineTotal: "$5.00"
+      })
+    }
+    return data;
+  }
+
+  function getTestOrderInfo() {
+    const data = []
+    data.push({
+      orderId: "123456",
+      customer: "Sherbert",
+      customerStatus: "Low",
+      orderDate: new Date(),
+      expectedDelivery: new Date("11/25/2021"), 
+    })
+    return data;
+  }
+
+  function getTestBillInfo() {
+    const data = []
+    data.push({
+      billAdr: "5500 Campanile Dr",
+      billAdr2: "Building Storm Hall #123",
+      billCity: "San Diego",
+      billState: "CA",
+      billPostCode: "92182",
+      billCountry: "US", 
+    })
+    return data;
+  }
+  
+  function getTestShippingInfo() {
+    const data = []
+    data.push({
+      shipAdr: "5500 Campanile Dr",
+      shipAdr2: "Building Storm Hall #123",
+      shipCity: "San Diego",
+      shipState: "CA",
+      shipPostCode: "92182",
+      shipCountry: "US", 
+      isBilling: true
+    })
+    return data;
+  }
+
   function getUserRole(userId) {
     return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
   }
@@ -152,6 +207,10 @@ export const FirebaseProvider = ({ children }) => {
     firebaseRegister,
     userDoc,
     orgDoc,
+    getTestOrderEntryData,
+    getTestOrderInfo,
+    getTestBillInfo,
+    getTestShippingInfo
   }
 
   return (
