@@ -19,6 +19,7 @@ export const FirebaseProvider = ({ children }) => {
   const [orgDoc, setOrgDoc] = React.useState();
   const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
+  const [tickets, setTickets] = React.useState([]);
 
   function firebaseRegister(email, password, firstName, lastName, orgId) {
     return new Promise((resolve, reject) => {
@@ -70,20 +71,31 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
-  function submitNewTicket(ticket) {
-    return new Promise(async (resolve, reject) => {
-      if (ticket.user) {
-        // const submitNewTicket = await setDoc(collection("tickets", doc(db, "organizations", ticket.orgId)), (userDocument) => {
+  /*
 
-        // }, (err) => {
-        //   if (err) {
-        //     reject('Could not add ticket.')
-        //     handleFirebaseErrors(err)
-        //     console.log(err)
-        //   }
-        // })
+  ticket = {
+    order: String
+    customer
+    description
+    problemType
+  }
+
+  */
+
+  function submitNewTicket(user, ticket) {
+    return new Promise(async (resolve, reject) => {
+      if (user) {
+        // TODO: Add type checking
+        const newTicket = await addDoc(collection(db, "organization", user.orgId, "tickets"), ticket);
+        if (newTicket) {
+          setTickets(old => [...old, newTicket])
+          resolve(newTicket);
+        }
+        else {
+          reject("Failed to add new ticket. Unknown error occured");
+        }
       } else {
-        reject('Could not add ticket')
+        reject('Could not add ticket. User is not defined');
       }
     })
   }
@@ -242,7 +254,8 @@ export const FirebaseProvider = ({ children }) => {
     userDoc,
     orgDoc,
     getTestInventoryData,
-    getTroubleTickets
+    getTroubleTickets,
+    submitNewTicket
   }
 
   return (
