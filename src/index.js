@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import './styles/index.css';
 import { FirebaseProvider } from "./components/FirestoreContext";
 import reportWebVitals from './reportWebVitals';
 
@@ -12,6 +11,7 @@ import TroubleTicketManagement from "./screens/TroubleTicketManagement";
 import InventorySystem from "./screens/InventorySystem";
 import Login from "./screens/Login";
 import CreateAccount from "./screens/CreateAccount";
+import ShipmentTracking from "./screens/ShipmentTracking";
 
 ReactDOM.render(
 
@@ -20,6 +20,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" render={(props) => <App {...props} />} />
         <Route path="/troubleTicketManagement" render={(props) => <TroubleTicketManagement {...props} />} />
+        <Route path="/shipmentTracking" render={(props) => <ShipmentTracking {...props} />} />
         <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
         <Route path="/login" render={(props) => <Login {...props} />} />

@@ -19,6 +19,7 @@ export const FirebaseProvider = ({ children }) => {
   const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
   const [tickets, setTickets] = React.useState([]);
+  const [shipmentData, setShipmentData] = React.useState([]);
 
   function slugify(string) {
     return string
@@ -232,6 +233,23 @@ export const FirebaseProvider = ({ children }) => {
     return data;
   }
 
+  function getTestshipmentData(numElements) {
+    const data = []
+    for (let i = 1; i <= numElements; i++) {
+      data.push({
+        orderId: i,
+        customer: "BillyBob",
+        orderPlacedTimestamp: "10/07/2021, 19:02:00 UTC-8:00",
+        status: "in-progress",
+        expectedDeliveryDate: "November 10th, 2021",
+        address: "5500 Campanile Drive, San Diego, CA, 92115",
+        billingAddress: "5500 Campanile Drive, San Diego, CA, 92115 ",
+        truck: (i % 3)
+      })
+    }
+    return data;
+  }
+
   function getUserRole(userId) {
     return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
   }
@@ -277,7 +295,8 @@ export const FirebaseProvider = ({ children }) => {
     getTroubleTickets,
     submitNewTicket,
     slugify,
-    firebaseSignIn
+    firebaseSignIn,
+    getTestshipmentData
   }
 
   return (
