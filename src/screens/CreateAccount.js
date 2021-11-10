@@ -30,15 +30,17 @@ function CreateAccount() {
                     <Form.Control type="text" placeholder="Organization" id="orgValue" />
                 </Form.Group>
                 <a href="/login" className="link-primary">Already have an account? Sign In</a>
-                <Button variant="primary" onClick={element => {
-                    firebaseRegister(
+                <Button variant="primary" onClick={async (element) => {
+                    const success = await firebaseRegister(
                         document.getElementById("emailValue").value,
                         document.getElementById("passValue").value,
                         document.getElementById("first-name").value,
                         document.getElementById("last-name").value,
                         document.getElementById("orgValue").value,
                     );
-                    window.location.assign("/login");
+                    if (success) {
+                        window.location.assign("/login");
+                    }
                 }
                 }>
                     Create Account
