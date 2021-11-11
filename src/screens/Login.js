@@ -18,8 +18,11 @@ function Login() {
                     <Form.Control type="password" placeholder="Password" id="passValue" />
                 </Form.Group>
                 <a href="/createAccount" className="link-primary">Create Account</a>
-                <Button variant="primary" type="submit" onClick={element => {
-                    firebaseSignIn(document.getElementById("emailValue").value, document.getElementById("passValue").value);
+                <Button variant="primary" onClick={(element) => {
+                    console.log(document.getElementById("emailValue").value)
+                    var email = document.getElementById("emailValue").value;
+                    var pass = document.getElementById("passValue").value
+                    firebaseSignIn(email, pass);
                     window.location.assign("/inventory");
                 }}>
                     Submit
