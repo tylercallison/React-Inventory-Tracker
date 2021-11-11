@@ -6,7 +6,7 @@ import { useFirebase } from '../components/FirestoreContext';
 export default function TroubleTicketManagement() {
 
     let mainCardDisplayed = 0;
-    const { orgDoc, getTroubleTickets } = useFirebase();
+    const { userDoc, getTroubleTickets } = useFirebase();
 
 
     const [sidebarElements, setSidebarElements] = React.useState([]);
@@ -52,74 +52,79 @@ export default function TroubleTicketManagement() {
         //         userReported: "Tyler",
         //     })
         // }
-        const returnTroubleTickets = await getTroubleTickets(orgDoc.id);
-        genSideBar(returnTroubleTickets);
+
+        (async function () {
+            const returnTroubleTickets = await getTroubleTickets("example");
+            genSideBar(returnTroubleTickets);
+        })();
     }, [])
 
     function genSideBar(issueList) {
         let cards = [];
 
-        if (issueList.size !=0) {
+        if (issueList.size != 0) {
             issueList.forEach(doc => {
                 const currDoc = doc.data();
+                // console.log(currDoc.reportTimestamp.toDate())
                 cards.push(
                     <div onClick={(element) => genMainCard(currDoc)}>
-                    <Card border='info' className='TicketCard'>
-                        <Card.Body>
-                            <Card.Title>{currDoc.issueName}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>{currDoc.reportTimestamp}</Card.Subtitle>
-                            <Card.Text>{currDoc.userReported}</Card.Text>
-                            <Card.Text>{currDoc.problemType}</Card.Text>
-                        </Card.Body>
-                    </Card>
-                </div>
+                        <Card border='info' className='TicketCard'>
+                            <Card.Body>
+                                <Card.Title>{currDoc.issueName}</Card.Title>
+                                <Card.Subtitle className='mb-2 text-muted'>{String(currDoc.reportTimestamp.toDate())}</Card.Subtitle>
+                                {/* <Card.Text>{JSON.stringify(currDoc.userReported)}</Card.Text> */}
+                                <Card.Text>{currDoc.problemType}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </div>
                 )
             })
         }
+        console.log(cards)
         setSidebarElements(cards);
     }
 
     function genMainCard(iss) {
-                let mainIssue = {
-                    associatedOrder: iss.associatedOrder,
-                    customer: iss.customer,
-                    description: iss.description,
-                    issueName: iss.issueName,
-                    problemStatus: iss.problemStatus,
-                    problemType: iss.dataproblemType,
-                    reportTimestamp: iss.reportTimestamp,
-                    resolutionDescription: iss.resolutionDescription,
-                    resolutionTimestamp: iss.resolutionTimestamp,
-                    userReported: iss.userReported,
-                };
-                console.log(mainIssue);
-                let mainCard =(
-                    <Card>
-                        <Card.Header>
-                            <Card.Title>{mainIssue.issueName}</Card.Title>
-                            <Card.Subtitle className='text-muted'>Date Reported: {mainIssue.reportTimestamp}</Card.Subtitle>
-                        </Card.Header>
-                        <Card.Body>
-                            <Card.Text >Issue Author: {mainIssue.userReported}</Card.Text>
-                            <Card.Text>{mainIssue.description}</Card.Text>
-                            <Card.Text></Card.Text>
-                        </Card.Body>
-                        <Button style={{}}>Generate Report</Button>
-                    </Card>
-                )
-                setMainElement(mainCard);
-            }
+        let mainIssue = {
+            associatedOrder: iss.associatedOrder,
+            customer: iss.customer,
+            description: iss.description,
+            issueName: iss.issueName,
+            problemStatus: iss.problemStatus,
+            problemType: iss.dataproblemType,
+            reportTimestamp: String(iss.reportTimestamp?.toDate()),
+            resolutionDescription: iss.resolutionDescription,
+            resolutionTimestamp: String(iss.resolutionTimestamp?.toDate()),
+            userReported: String(iss.userReported),
+        };
+        console.log(mainIssue);
+        let mainCard = (
+            <Card>
+                <Card.Header>
+                    <Card.Title>{mainIssue.issueName}</Card.Title>
+                    <Card.Subtitle className='text-muted'>Date Reported: {mainIssue.reportTimestamp}</Card.Subtitle>
+                </Card.Header>
+                <Card.Body>
+                    <Card.Text >Issue Author: {mainIssue.userReported}</Card.Text>
+                    <Card.Text>{mainIssue.description}</Card.Text>
+                    {mainIssue.resolutionDescription ? <Card.Text>Test Resolution</Card.Text> : null}
+                </Card.Body>
+                <Button style={{}}>Generate Report</Button>
+            </Card>
+        )
+        setMainElement(mainCard);
+    }
 
     return (
-            <div>
-                <div className='IssueList' style={{ height: window.innerHeight, overflowY: 'scroll' }}>
-                    <Container>
-                        {sidebarElements}
-                    </Container>
-                </div>
-                <div className='CurrentIssue'>
-                    {mainElement}
-                </div>
+        <div>
+            <div className='IssueList' style={{ height: window.innerHeight, overflowY: 'scroll' }}>
+                <Container>
+                    {sidebarElements}
+                </Container>
             </div>
-        );
-    }
+            <div className='CurrentIssue'>
+                {mainElement}
+            </div>
+        </div>
+    );
+}
