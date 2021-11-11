@@ -33,8 +33,8 @@ export const FirebaseProvider = ({ children }) => {
       .replace(/-+$/, "");
   }
 
-  function firebaseSignIn(email, password) {
-    return signInWithEmailAndPassword(email, password)
+  async function firebaseSignIn(email, password) {
+    return await signInWithEmailAndPassword(auth, email, password);
   }
 
   function firebaseRegister(email, password, firstName, lastName, orgId) {
@@ -195,7 +195,7 @@ export const FirebaseProvider = ({ children }) => {
 
   function watchOrgData(orgId) {
     return new Promise((resolve, reject) => {
-      // console.log("attempting to get org data")
+      console.log("Attempting to get org data: " + JSON.stringify(orgId))
       if (orgId) {
         const orgDocumentListener = onSnapshot(doc(db, 'organization', orgId), (orgDocument) => {
           if (orgDocument) {
@@ -233,7 +233,7 @@ export const FirebaseProvider = ({ children }) => {
     return data;
   }
 
-  function getTestshipmentData(numElements) {
+  function getTestShipmentData(numElements) {
     const data = []
     for (let i = 1; i <= numElements; i++) {
       data.push({
@@ -255,16 +255,17 @@ export const FirebaseProvider = ({ children }) => {
   }
 
   function handleFirebaseErrors(error) {
+    alert(error)
     console.log(error)
   }
 
   React.useEffect(() => {
     const unsubscribers = [];
-    const authUnsubscriber = onAuthStateChanged(auth, (user) => {
+    const authUnsubscriber = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {
-        const userDataReturn = watchUserData(user);
-        const orgDataReturn = watchOrgData(userDataReturn.document);
+        const userDataReturn = await watchUserData(user);
+        const orgDataReturn = await watchOrgData(userDataReturn.document.data().orgId);
 
         unsubscribers.push(userDataReturn.unsubscriber)
         unsubscribers.push(orgDataReturn.unsubscriber)
@@ -296,7 +297,7 @@ export const FirebaseProvider = ({ children }) => {
     submitNewTicket,
     slugify,
     firebaseSignIn,
-    getTestshipmentData
+    getTestShipmentData
   }
 
   return (
