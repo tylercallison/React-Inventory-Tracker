@@ -19,68 +19,93 @@ export default function TroubleTicketManagement(){
         let issues = [];
         for(let i = 0; i < 5; i++){
             issues.push({
-                issueName: "Problem " + (i+1),
-                dateReported: "10/23/2020",
-                author: "Tyler",
-                issueType: "Major",
+                id: i,
+                associatedOrder: i,
+                customer: "Bob",
+                description: "Missing inv, Bob needs his f**king vanilla ice cream",
+                issueName: "Inventory Missing",
+                problemStatus: "unresolved",
+                problemType: "major",
+                reportTimestamp: "Nov 1st",
+                resolutionDescription: "not resolved yet",
+                resolutionTimestamp: "",
+                userReported: "Cole",
             })
         }
-        let mainIssue = [];
-        mainIssue.push({
-            issueName: "Rocky Road is out of stock",
-            dateReported: "10/27/2021",
-            author: "Cole",
-            issueSummary: "A previous order claimed the last of the rocky road from the inventory. Rocky Road is now out of stock and we need to replenish the inventory.",
-        })
+        for(let i = 0; i < 5; i++){
+            issues.push({
+                id: i+10,
+                associatedOrder: i+10,
+                customer: "George",
+                description: "Customer information not found",
+                issueName: "Error connecting order to customer",
+                problemStatus: "unresolved",
+                problemType: "major",
+                reportTimestamp: "Nov 3rd",
+                resolutionDescription: "not resolved yet",
+                resolutionTimestamp: "",
+                userReported: "Tyler",
+            })
+        }
         genSideBar(issues);
-        genMainCard(mainIssue);
     }, [])
 
     function genSideBar(issueList){
         let cards = [];
         issueList.map((data, key)=> {
             cards.push(
-                <Container id={key}>
-                    <Card border='info' className='TicketCard'>
+                <div onClick={(element) => genMainCard(data)}>
+                    <Card  border='info' className='TicketCard' id={key}>
                         <Card.Body>
                             <Card.Title>{data.issueName}</Card.Title>
-                            <Card.Subtitle className='mb-2 text-muted'>{data.dateReported}</Card.Subtitle>
-                            <Card.Text>{data.author}</Card.Text>
-                            <Card.Text>{data.issueType}</Card.Text>
+                            <Card.Subtitle className='mb-2 text-muted'>{data.reportTimestamp}</Card.Subtitle>
+                            <Card.Text>{data.userReported}</Card.Text>
+                            <Card.Text>{data.problemType}</Card.Text>
                         </Card.Body>
                     </Card>
-                </Container>
+                </div>        
             )
         })
-        console.log(cards);
         setSidebarElements(cards);
     }
 
-    function genMainCard(mainIssue){
-        let mainCard;
-        mainIssue.map((data,key)=>{
-            mainCard =[
+    function genMainCard(iss){
+        let mainIssue = {
+            id: iss.id,
+            associatedOrder: iss.associatedOrder,
+            customer: iss.customer,
+            description: iss.description,
+            issueName: iss.issueName,
+            problemStatus: iss.problemStatus,
+            problemType: iss.problemType,
+            reportTimestamp: iss.reportTimestamp,
+            resolutionDescription: iss.resolutionDescription,
+            resolutionTimestamp: iss.resolutionTimestamp,
+            userReported: iss.userReported,
+        };
+        console.log(mainIssue);
+        let mainCard=(
                 <Card>
                     <Card.Header>
-                        <Card.Title>{data.issueName}</Card.Title>
-                        <Card.Subtitle className='text-muted'>Date Reported: {data.dateReported}</Card.Subtitle>
+                        <Card.Title>{mainIssue.issueName}</Card.Title>
+                        <Card.Subtitle className='text-muted'>Date Reported: {mainIssue.reportTimestamp}</Card.Subtitle>
                     </Card.Header>
                     <Card.Body>
-                        <Card.Text >Issue Author: {data.author}</Card.Text>
-                        <Card.Text>{data.issueSummary}</Card.Text>
+                        <Card.Text >Issue Author: {mainIssue.userReported}</Card.Text>
+                        <Card.Text>{mainIssue.description}</Card.Text>
                         <Card.Text></Card.Text>
                     </Card.Body>
                 </Card>
-            ]
-        })
-        console.log(mainCard);
+        )
         setMainElement(mainCard);
     }
 
     return(
         <div>
-            <div className='IssueList'>
-                {sidebarElements}
+            <div className='IssueList' style={{height: window.innerHeight, overflowY: 'scroll'}}>
+                <Container>
+                    {sidebarElements}
+                </Container>
             </div>
             <div className='CurrentIssue'>
                 {mainElement}
