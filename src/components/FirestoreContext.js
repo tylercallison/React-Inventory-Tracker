@@ -90,7 +90,6 @@ export const FirebaseProvider = ({ children }) => {
   function addInventoryElement(flavor, size, units, price) {
     return new Promise(async (resolve, reject) => {
       if (userDoc) {
-        let newElement
         try {
           await updateDoc(doc(db, "organization", userDoc.data().orgId, "inventory", flavor), {
             [`availableAmounts.${size}`]: increment(units),
