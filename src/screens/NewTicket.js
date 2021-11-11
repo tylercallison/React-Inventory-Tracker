@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useFirebase } from '../components/FirestoreContext';
+import { serverTimestamp } from "firebase/firestore";
 
 function NewTicket() {
+
+    const { submitNewTicket, slugify } = useFirebase()
+
     return (
         <div className="container">
             <h1>Submit a ticket</h1>
@@ -13,12 +18,12 @@ function NewTicket() {
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Subject:</Form.Label>
-                    <Form.Control type="email" placeholder="Subject" />
+                    <Form.Control type="text" placeholder="Subject" id="subject" name="subject" />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>Type of Issue:</Form.Label>
-                    <Form.Select aria-label="Default select example">
-                        <option>Select an issue:</option>
+                    <Form.Select id="issue-type" name="issue-type">
+                        <option>Select an issue</option>
                         <option>General</option>
                         <option>Order Entry</option>
                         <option>Inventory</option>
@@ -27,12 +32,35 @@ function NewTicket() {
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
+                    <Form.Label>Order Number:</Form.Label>
+                    <Form.Control type="text" placeholder="Order Number" id="order-num" name="order-num" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Customer ID:</Form.Label>
+                    <Form.Control type="text" placeholder="Customer Id" id="customer-id" name="customer-id" />
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>Describe your issue:</Form.Label>
-                    <Form.Control as="textarea" rows={5} />
+                    <Form.Control as="textarea" rows={5} placeholder="Description" id="description" name="description" />
                 </Form.Group>
                 <Form.Group>
                     <br />
-                    <Button color="info">Submit</Button>
+                    <Button color="info" onClick={(element) => {
+                        submitNewTicket({ orgId: "example" }, {
+                            associatedOrder: document.getElementById("order-num").value,
+                            customer: document.getElementById("customer-id").value,
+                            description: document.getElementById("description").value,
+                            issueName: document.getElementById("subject").value,
+                            problemStatus: "unresolved",
+                            problemType: slugify(document.getElementById("issue-type").value),
+                            reportTimestamp: serverTimestamp(),
+                            resolutionDescription: "",
+                            resolvedTimestamp: "",
+                            userReported: "",
+                        }
+                        )
+                        window.location.reload();
+                    }}>Submit</Button>
                 </Form.Group>
             </Form>
         </div>
