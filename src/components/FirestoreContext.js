@@ -1,6 +1,6 @@
 import "../config"
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
-import { collection, doc, setDoc, getDoc, getFirestore, onSnapshot, query, addDoc, getDocs, where } from "firebase/firestore";
+import { collection, doc, setDoc, getDoc, getFirestore, onSnapshot, query, addDoc, getDocs, where, increment, updateDoc } from "firebase/firestore";
 
 import React, { useContext, createContext } from 'react';
 
@@ -84,6 +84,46 @@ export const FirebaseProvider = ({ children }) => {
       }).catch(e => {
         handleFirebaseErrors(e);
       })
+    })
+  }
+
+  function addInventoryElement(flavor, size, units, price) {
+    return new Promise(async (resolve, reject) => {
+      if (userDoc) {
+        try {
+          await updateDoc(doc(db, "organization", userDoc.data().orgId, "inventory", flavor), {
+            [`availableAmounts.${size}`]: increment(units),
+            flavor: flavor,
+            [`prices.${size}`]: increment(price),
+          }, { merge: true });
+        } catch {
+          await setDoc(doc(db, "organization", userDoc.data().orgId, "inventory", flavor), {
+            availableAmounts: { [`${size}`]: increment(units) },
+            flavor: flavor,
+            prices: { [`${size}`]: increment(price) },
+          }, { merge: true });
+        }
+      } else {
+        reject('Could not add ticket. User is not defined');
+      }
+    })
+  }
+
+  function getInventoryElements(orgId) {
+    return new Promise(async (resolve, reject) => {
+      if (orgId) {
+        console.log("Getting inventory elements...")
+        const inventoryElementsReturn = await getDocs(query(collection(db, "organization", orgId, "inventory")))
+        console.log("Size: " + inventoryElementsReturn.size)
+        inventoryElementsReturn.forEach((element) => {
+          console.log(element.data())
+        });
+        // console.log(troubleTicketsReturn);
+        setInventoryData(inventoryElementsReturn);
+        resolve(inventoryElementsReturn);
+      } else {
+        reject('Get trouble ticket data failed. User empty')
+      }
     })
   }
 
@@ -238,12 +278,11 @@ export const FirebaseProvider = ({ children }) => {
     const data = []
     for (let i = 0; i < numElements; i++) {
       data.push({
-        id: i,
-        title: "Sherbert",
-        size: "Pint",
-        units: 45,
-        price: 12,
-        outgoingUnits: 45
+        flavor: "Sherbert",
+        sizes: ["Pint", "Quart"],
+        units: [45, 32],
+        prices: [12, 15],
+        outgoingUnits: [45, 0]
       })
     }
     return data;
@@ -319,6 +358,11 @@ export const FirebaseProvider = ({ children }) => {
     const authUnsubscriber = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {
+        if (window.location.pathname === "/login" || window.location.pathname === "/createAccount") {
+          // console.log(window.location.pathname)
+          window.location.assign("/inventory");
+        }
+
         const userDataReturn = await watchUserData(user);
         const orgDataReturn = await watchOrgData(userDataReturn.document.data().orgId);
 
@@ -356,7 +400,9 @@ export const FirebaseProvider = ({ children }) => {
     submitNewTicket,
     slugify,
     firebaseSignIn,
-    getTestShipmentData
+    getTestShipmentData,
+    addInventoryElement,
+    inventoryData
   }
 
   return (
