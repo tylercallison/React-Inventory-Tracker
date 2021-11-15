@@ -3,20 +3,238 @@ import * as ReactBootStrap from "react-bootstrap"
 import GridLayout from 'react-grid-layout';
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from '../components/DatePicker.js'
-
+import { useFirebase } from '../components/FirestoreContext';
 
 export default function OrderEntry() {
+     const { getTestOrderEntryData, getTestOrderInfo, getTestBillInfo, getTestShippingInfo } = useFirebase()
+     const [rowElements, setRowElements] = React.useState([])
+     const [orderInfo, setOrderInfoElements] = React.useState([])
+     const [orderBillingInfo, setOrderBillingInfo] = React.useState([])
+     const [orderShippingInfo, setOrderShippingInfo] = React.useState([])
 
-     let input1 = "";
-     const [input2, setInput2] = React.useState("");
+     let rows = []
+     let orderInfoCard = []
+     let orderBillingCard = []
+     let orderShippingCard = []
 
-     const orderExamples = [
-          { lineNumber: "1", itemName: "Vanilla", size: "1 qt", quantity: "1", estDelivery: new Date("11/25/2021"), lineTotal: "$5.00" },
-          { lineNumber: "2", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00" },
-          { lineNumber: "3", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00" },
-          { lineNumber: "4", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00" },
-          { lineNumber: "5", itemName: "Chocolate", size: "8 os", quantity: "5", estDelivery: new Date("11/25/2021"), lineTotal: "$20.00" }
-     ]
+     React.useEffect(() => {
+          genTable(getTestOrderEntryData(5))
+          genOrderInfoCard(getTestOrderInfo())
+          genOrderBillingCard(getTestBillInfo())
+          genOrderShippingCard(getTestShippingInfo())
+     }, [])
+
+     function genTable(rowData) {
+          rowData.map((data, key) => {
+               rows.push(
+                    <tr key={key}>
+                         <td>{data.lineNumber}</td>
+                         <td>
+                              <input list="item_names" name="input_normal" defaultValue={data.itemName} />
+                              <datalist id="item_names">
+                                   <option value="Vanilla" />
+                                   <option value="Chocolate" />
+                                   <option value="Strawberry" />
+                              </datalist>
+                         </td>
+                         <td>
+                              <select class="form-control">
+                                   <option>1 pt</option>
+                                   <option>2 pt</option>
+                                   <option>1 qt</option>
+                                   <option>2 qt</option>
+                              </select>
+                         </td>
+                         <td>
+                              <input defaultValue={data.quantity} />
+                         </td>
+                         <td>
+                              <DatePicker initialDate={data.estDelivery} />
+                         </td>
+                         <td>{data.lineTotal}</td>
+                    </tr>
+               )
+          })
+          setRowElements(rows)
+     }
+
+     function genOrderInfoCard(orderInfoTable) {
+          orderInfoTable.map((data, key) => {
+               orderInfoCard.push(
+                    <tbody key={key}>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Order ID:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.orderId} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Customer:</b></p>
+                              </td>
+                              <td>
+                                   <input list="customer" name="input_normal" value={data.customer} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Customer Status:</b></p>
+                              </td>
+                              <td>
+                                   <input list="customerStatus" name="input_normal" value={data.customerStatus} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Order Date:</b></p>
+                              </td>
+                              <td>
+                                   <DatePicker initialDate={data.orderDate} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Expected Delivery:</b></p>
+                              </td>
+                              <td>
+                                   <DatePicker initialDate={data.expectedDelivery} />
+                              </td>
+                         </tr>
+                    </tbody>
+               )
+          })
+          setOrderInfoElements(orderInfoCard)
+     }
+
+     function genOrderBillingCard(orderInfoTable) {
+          orderInfoTable.map((data, key) => {
+               orderBillingCard.push(
+                    <tbody key={key}>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Billing Address:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.billAdr} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Address 2:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.billAdr2} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>City:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.billCity} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>State:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.billState} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Post Code:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.billPostCode} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Country:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.billCountry} />
+                              </td>
+                         </tr>
+                    </tbody>
+               )
+          })
+          setOrderBillingInfo(orderBillingCard)
+     }
+
+     function genOrderShippingCard(orderInfoTable) {
+          orderInfoTable.map((data, key) => {
+               orderShippingCard.push(
+                    <tbody key={key}>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Shipping Address:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.shipAdr} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Address 2:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.shipAdr2} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>City:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.shipCity} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>State:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.shipState} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Post Code:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.shipPostCode} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td>
+                                   <p class="card-text"><b>Country:</b></p>
+                              </td>
+                              <td>
+                                   <input list="order_id" name="input_normal" value={data.shipCountry} />
+                              </td>
+                         </tr>
+                         <tr>
+                              <td colSpan="2">
+                                   <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked={data.isBilling} id="flexCheckDefault" />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                             Same as billing?
+                                        </label>
+                                   </div>
+                              </td>
+                         </tr>
+                    </tbody>
+               )
+          })
+          setOrderShippingInfo(orderShippingCard)
+     }
+
+
 
      const layout = [
           { i: 'orderTable', x: 0, y: 0, w: 1, h: 2 },
@@ -59,48 +277,7 @@ export default function OrderEntry() {
                     <div class="card" style={{ "width": '50%' }}>
                          <div class="card-body">
                               <table class="table" columnGap='5px'>
-                                   <tbody>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Order ID:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" onChange={(input) => input1 = input} />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Customer:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Customer Status:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Order Date:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Expected Delivery:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                   </tbody>
+                                   {orderInfo}
                               </table>
                          </div>
                     </div>
@@ -108,122 +285,14 @@ export default function OrderEntry() {
                     <div class="card" style={{ "width": '50%' }} >
                          <div class="card-body">
                               <table class="table" columnGap='5px'>
-                                   <tbody>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Billing Address:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Address 2:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>City:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>State:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Post Code:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Country:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                   </tbody>
+                                   {orderBillingInfo}
                               </table>
                          </div>
                     </div>
                     <div class="card" style={{ "width": '50%' }} >
                          <div class="card-body">
                               <table class="table" columnGap='5px'>
-                                   <tbody>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Shipping Address:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Address 2:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>City:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>State:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Post Code:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td>
-                                                  <p class="card-text"><b>Country:</b></p>
-                                             </td>
-                                             <td>
-                                                  <input list="order_id" name="input_normal" />
-                                             </td>
-                                        </tr>
-                                        <tr>
-                                             <td colSpan="2">
-                                                  <div class="form-check">
-                                                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                                       <label class="form-check-label" for="flexCheckDefault">
-                                                            Same as billing?
-                                                       </label>
-                                                  </div>
-                                             </td>
-                                        </tr>
-                                   </tbody>
+                                   {orderShippingInfo}
                               </table>
                          </div>
                     </div>
@@ -242,9 +311,8 @@ export default function OrderEntry() {
                                    <th>Line Total</th>
                               </tr>
                          </thead>
-
                          <tbody>
-                              {orderExamples.map(renderOrder)}
+                              {rowElements}
                          </tbody>
                     </ReactBootStrap.Table>
                </div>

@@ -6,6 +6,7 @@ import { FirebaseProvider } from "./components/FirestoreContext";
 import reportWebVitals from './reportWebVitals';
 
 import App from "./screens/App.js";
+import OrderEntry from "./screens/OrderEntry.js"
 import NewTicket from "./screens/NewTicket.js";
 import TroubleTicketManagement from "./screens/TroubleTicketManagement";
 import InventorySystem from "./screens/InventorySystem";
@@ -25,6 +26,7 @@ ReactDOM.render(
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
         <Route path="/login" render={(props) => <Login {...props} />} />
         <Route path="/createAccount" render={(props) => <CreateAccount {...props} />} />
+        <Route path="/orderEntry" render={(props) => <OrderEntry {...props} />} />
         <Route render={() => <Redirect to="/" />} />
         {/*<Redirect from="/" to="/index" />*/}
       </Switch>
