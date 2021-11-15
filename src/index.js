@@ -12,6 +12,7 @@ import InventorySystem from "./screens/InventorySystem";
 import Login from "./screens/Login";
 import CreateAccount from "./screens/CreateAccount";
 import ShipmentTracking from "./screens/ShipmentTracking";
+import OrderEntry from "./screens/OrderEntry";
 
 ReactDOM.render(
 
@@ -23,6 +24,7 @@ ReactDOM.render(
         <Route path="/shipmentTracking" render={(props) => <ShipmentTracking {...props} />} />
         <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
+        <Route path="/orderentry" render={(props) => <OrderEntry {...props} />} />
         <Route path="/login" render={(props) => <Login {...props} />} />
         <Route path="/createAccount" render={(props) => <CreateAccount {...props} />} />
         <Route render={() => <Redirect to="/" />} />
