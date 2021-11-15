@@ -55,16 +55,22 @@ export default function TroubleTicketManagement() {
 
         (async function () {
             const returnTroubleTickets = await getTroubleTickets("example");
-            genSideBar(returnTroubleTickets);
+            const sidebarElements = genSideBar(returnTroubleTickets);
+
+            if (sidebarElements.length > 0) {
+                genMainCard(sidebarElements[0])
+            }
         })();
     }, [])
 
     function genSideBar(issueList) {
         let cards = [];
+        let cardData = [];
 
         if (issueList.size != 0) {
             issueList.forEach(doc => {
                 const currDoc = doc.data();
+                cardData.push(currDoc);
                 // console.log(currDoc.reportTimestamp.toDate())
                 cards.push(
                     <div onClick={(element) => genMainCard(currDoc)}>
@@ -82,6 +88,7 @@ export default function TroubleTicketManagement() {
         }
         console.log(cards)
         setSidebarElements(cards);
+        return cardData;
     }
 
     function genMainCard(iss) {
