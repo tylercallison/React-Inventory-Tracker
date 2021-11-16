@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const DatePickerObj = ({initialDate}) => {
+const DatePickerObj = ({ initialDate }) => {
     console.log(initialDate)
     const [startDate, setStartDate] = useState(initialDate ? new Date(initialDate) : null)
     return (

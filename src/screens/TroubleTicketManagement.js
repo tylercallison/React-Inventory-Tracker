@@ -1,7 +1,8 @@
 import React from "react";
-import { Card, Container, Button } from "react-bootstrap";
+import { Card, Container, Button, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import '../styles/TroubleTicketManagement.css';
 import { useFirebase } from '../components/FirestoreContext';
+import logo from "../assets/icetracklogo.png"
 
 export default function TroubleTicketManagement() {
 
@@ -124,6 +125,28 @@ export default function TroubleTicketManagement() {
 
     return (
         <div>
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
+                <Container fluid>
+                    <Navbar.Brand href="#home"><img src={logo} width="100px" /></Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Link href="/inventory">Inventory</Nav.Link>
+                            <Nav.Link href="/orderentry">Order Entry</Nav.Link>
+                            <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
+                            <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
+
+                            {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
+                                <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>
+                                <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
+                            </NavDropdown> */}
+                        </Nav>
+                        <Nav>
+                            <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
             <div className='IssueList' style={{ height: window.innerHeight, overflowY: 'scroll' }}>
                 <Container>
                     {sidebarElements}
