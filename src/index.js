@@ -24,9 +24,9 @@ ReactDOM.render(
         <Route path="/shipmentTracking" render={(props) => <ShipmentTracking {...props} />} />
         <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
+        <Route path="/orderentry" render={(props) => <OrderEntry {...props} />} />
         <Route path="/login" render={(props) => <Login {...props} />} />
         <Route path="/createAccount" render={(props) => <CreateAccount {...props} />} />
-        <Route path="/orderEntry" render={(props) => <OrderEntry {...props} />} />
         <Route render={() => <Redirect to="/" />} />
         {/*<Redirect from="/" to="/index" />*/}
       </Switch>
