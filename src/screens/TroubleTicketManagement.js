@@ -134,7 +134,7 @@ export default function TroubleTicketManagement() {
                             <Nav.Link href="/inventory">Inventory</Nav.Link>
                             <Nav.Link href="/orderentry">Order Entry</Nav.Link>
                             <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
-                            {/* <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link> */}
+                            <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
 
                             {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
                                 <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>

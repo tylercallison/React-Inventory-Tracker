@@ -26,9 +26,9 @@ function NewTicket() {
                                 <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
                             </NavDropdown> */}
                         </Nav>
-                        {/* <Nav>
+                        <Nav>
                             <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
-                        </Nav> */}
+                        </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

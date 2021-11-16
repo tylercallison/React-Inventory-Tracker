@@ -6,13 +6,13 @@ import { FirebaseProvider } from "./components/FirestoreContext";
 import reportWebVitals from './reportWebVitals';
 
 import App from "./screens/App.js";
+import OrderEntry from "./screens/OrderEntry.js"
 import NewTicket from "./screens/NewTicket.js";
 import TroubleTicketManagement from "./screens/TroubleTicketManagement";
 import InventorySystem from "./screens/InventorySystem";
 import Login from "./screens/Login";
 import CreateAccount from "./screens/CreateAccount";
 import ShipmentTracking from "./screens/ShipmentTracking";
-import OrderEntry from "./screens/OrderEntry";
 
 ReactDOM.render(
 
