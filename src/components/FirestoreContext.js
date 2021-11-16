@@ -16,6 +16,7 @@ export const FirebaseProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = React.useState();
   const [userDoc, setUserDoc] = React.useState();
   const [orgDoc, setOrgDoc] = React.useState();
+  const [isLoading, setIsLoading] = React.useState(true);
   const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
   const [tickets, setTickets] = React.useState([]);
@@ -31,6 +32,15 @@ export const FirebaseProvider = ({ children }) => {
       .replace(/\-\-+/g, "-")
       .replace(/^-+/, "")
       .replace(/-+$/, "");
+  }
+
+  function unslugify(slug) {
+    var words = slug.split('-');
+    for (var i = 0; i < words.length; i++) {
+      var word = words[i];
+      words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+    }
+    return words.join(' ');
   }
 
   async function firebaseSignIn(email, password) {
@@ -91,17 +101,29 @@ export const FirebaseProvider = ({ children }) => {
     return new Promise(async (resolve, reject) => {
       if (userDoc) {
         try {
+          size = slugify(size);
+          flavor = slugify(flavor);
           await updateDoc(doc(db, "organization", userDoc.data().orgId, "inventory", flavor), {
             [`availableAmounts.${size}`]: increment(units),
             flavor: flavor,
-            [`prices.${size}`]: increment(price),
+            [`prices.${size}`]: price,
+            [`pendingAmount.${size}`]: 0,
           }, { merge: true });
-        } catch {
-          await setDoc(doc(db, "organization", userDoc.data().orgId, "inventory", flavor), {
-            availableAmounts: { [`${size}`]: increment(units) },
-            flavor: flavor,
-            prices: { [`${size}`]: increment(price) },
-          }, { merge: true });
+          resolve(true);
+        } catch (e) {
+          try {
+            await setDoc(doc(db, "organization", userDoc.data().orgId, "inventory", flavor), {
+              availableAmounts: { [`${size}`]: increment(units) },
+              flavor: flavor,
+              prices: { [`${size}`]: price },
+              pendingAmount: { [`${size}`]: 0 },
+            }, { merge: true })
+            resolve(true);
+          } catch (e) {
+            reject("Failed to create new inventory element");
+            handleFirebaseErrors(e);
+            return;
+          }
         }
       } else {
         reject('Could not add ticket. User is not defined');
@@ -109,18 +131,25 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
-  function getInventoryElements(orgId) {
+  function getInventoryElements() {
     return new Promise(async (resolve, reject) => {
-      if (orgId) {
+      if (userDoc.data().orgId) {
         console.log("Getting inventory elements...")
-        const inventoryElementsReturn = await getDocs(query(collection(db, "organization", orgId, "inventory")))
+        const inventoryDataElements = [];
+        const inventoryElementsReturn = await getDocs(query(collection(db, "organization", userDoc.data().orgId, "inventory"))).catch((e) => {
+          if (e) {
+            handleFirebaseErrors(e);
+            reject('Get trouble ticket data failed.\n' + JSON.stringify(e))
+          }
+        })
         console.log("Size: " + inventoryElementsReturn.size)
         inventoryElementsReturn.forEach((element) => {
-          console.log(element.data())
+          inventoryDataElements.push(element.data());
+          // console.log(element.data())
         });
         // console.log(troubleTicketsReturn);
-        setInventoryData(inventoryElementsReturn);
-        resolve(inventoryElementsReturn);
+        setInventoryData(inventoryDataElements);
+        resolve(inventoryDataElements);
       } else {
         reject('Get trouble ticket data failed. User empty')
       }
@@ -357,20 +386,23 @@ export const FirebaseProvider = ({ children }) => {
     const unsubscribers = [];
     const authUnsubscriber = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      setIsLoading(true);
       if (user) {
         if (window.location.pathname === "/login" || window.location.pathname === "/createAccount") {
           // console.log(window.location.pathname)
           window.location.assign("/inventory");
         }
-
         const userDataReturn = await watchUserData(user);
         const orgDataReturn = await watchOrgData(userDataReturn.document.data().orgId);
+
+        setIsLoading(false);
 
         unsubscribers.push(userDataReturn.unsubscriber)
         unsubscribers.push(orgDataReturn.unsubscriber)
         unsubscribers.push(authUnsubscriber)
 
       } else {
+        setIsLoading(false);
         if (window.location.pathname !== "/login" && window.location.pathname !== "/createAccount") {
           // console.log(window.location.pathname)
           window.location.assign("/login");
@@ -402,7 +434,10 @@ export const FirebaseProvider = ({ children }) => {
     firebaseSignIn,
     getTestShipmentData,
     addInventoryElement,
-    inventoryData
+    inventoryData,
+    getInventoryElements,
+    isLoading,
+    unslugify,
   }
 
   return (
