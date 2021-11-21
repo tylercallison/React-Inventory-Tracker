@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 import App from "./screens/App.js";
 import OrderEntry from "./screens/OrderEntry.js"
+import OrderTracking from "./screens/OrderTracking.js";
 import NewTicket from "./screens/NewTicket.js";
 import TroubleTicketManagement from "./screens/TroubleTicketManagement";
 import InventorySystem from "./screens/InventorySystem";
@@ -24,6 +25,7 @@ ReactDOM.render(
         <Route path="/shipmentTracking" render={(props) => <ShipmentTracking {...props} />} />
         <Route path="/newTicket" render={(props) => <NewTicket {...props} />} />
         <Route path="/inventory" render={(props) => <InventorySystem {...props} />} />
+        <Route path="/ordertracking" render={(props) => <OrderTracking {...props} />} />
         <Route path="/orderentry" render={(props) => <OrderEntry {...props} />} />
         <Route path="/login" render={(props) => <Login {...props} />} />
         <Route path="/createAccount" render={(props) => <CreateAccount {...props} />} />
