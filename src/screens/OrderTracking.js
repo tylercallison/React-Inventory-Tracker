@@ -15,7 +15,7 @@ import Loading from 'react-fullscreen-loading';
 
 export default function OrderTracking() {
 
-  const { getTestInventoryData, addInventoryElement, getInventoryElements, isLoading, unslugify } = useFirebase()
+  const { getOrderElements, isLoading, unslugify } = useFirebase()
 
   // const [rowData, setRowData] = React.useState([]);
   const [rowElements, setRowElements] = React.useState([]);
@@ -25,15 +25,41 @@ export default function OrderTracking() {
   let rows = []
 
   React.useEffect(() => {
-    // genAllTableRows(getTestInventoryData(5)) //make sure this number is same in test
     if (!isLoading) {
       (async function () {
-        const result = await getInventoryElements();
-        console.log(result);
-        genAllTableRows(result);
+        const orders = await getOrderElements();
+        for (let i = 0; i < orders.length; i++) {
+          let temp = {
+            customer: orders[i].customer,
+            orderid: orders[i].orderId,
+            address: orders[i].address,
+            dateordered: orders[i].orderPlacedTimestamp,
+            orderstatus: orders[i].status,
+            ordercost: orders[i].products.totalCost,
+          }
+          addTableRow(temp);
+        }
       })()
     }
-  }, [isLoading])
+    let orders = [];
+    for (let i = 0; i < 5; i++) {
+      orders.push({
+
+      })
+    }
+    for (let i = 0; i < 5; i++) {
+      orders.push({
+        customer: "Tyler",
+        orderid: i + Math.floor(Math.random() * 100),
+        address: "5373 College Ave, San Diego, CA 92115",
+        dateordered: "November 20th, 2021",
+        orderstatus: "Submitted",
+        ordercost: "$25",
+      })
+    }
+
+
+  }, [/*isLoading*/])
 
   // function handleShow() {
   //   setFullscreen(true);
@@ -91,12 +117,12 @@ export default function OrderTracking() {
 
     rows.push(
       <tr /*onClick={() => handleShow()}*/>
-        <td>{newData.id}</td>
-        <td>{newData.title}</td>
-        <td>{newData.size}</td>
-        <td>{newData.units}</td>
-        <td>{newData.price}</td>
-        <td>{newData.outgoingUnits}</td>
+        <td>{newData.customer}</td>
+        <td>{newData.orderid}</td>
+        <td>{newData.address}</td>
+        <td>{newData.dateordered}</td>
+        <td>{newData.orderstatus}</td>
+        <td>{newData.ordercost}</td>
       </tr>)
     setRowElements(rows);
   }
@@ -110,14 +136,8 @@ export default function OrderTracking() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/inventory">Inventory</Nav.Link>
-              <Nav.Link href="/orderentry">Order Entry</Nav.Link>
               <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
               <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
-
-              {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
-                            </NavDropdown> */}
             </Nav>
             <Nav>
               <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
@@ -129,7 +149,7 @@ export default function OrderTracking() {
         <>
           <Loading loading={isLoading} background="white" loaderColor="#3498db" />
           <Container fluid>
-            <Modal
+            {/* <Modal
               size="lg"
               aria-labelledby="contained-modal-title-vcenter"
               show={inventoryModalShow}
@@ -172,7 +192,7 @@ export default function OrderTracking() {
                 }}>Submit</Button>
                 <Button variant="secondary" onClick={() => setInventoryModalShow(false)}>Close</Button>
               </Modal.Footer>
-            </Modal>
+            </Modal> */}
 
             {/* <Modal show={show} onHide={() => setShow(false)}>
               <Modal.Header closeButton>
@@ -184,21 +204,22 @@ export default function OrderTracking() {
             <div id="InventorySystem" style={{ flex: 1 }}>
               <div className="row">
                 <div className="col d-flex">
-                  <span style={{ fontSize: 45, fontWeight: 500 }} >Inventory Overview</span>
+                  <span style={{ fontSize: 45, fontWeight: 500 }} >Customer Orders</span>
                 </div>
                 <div className="col d-flex flex-row-reverse">
-                  <Button style={{ margin: 10 }} variant="info" onClick={() => setInventoryModalShow(true)}>Add Inventory</Button>
+                  <Button style={{ margin: 10 }} variant="info" onClick={event => window.location.href = '/orderentry'}>Input Order</Button>
                 </div >
               </div >
 
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>Flavor</th>
-                    <th>Sizes</th>
-                    <th>Units</th>
-                    <th>Prices</th>
-                    <th>Outgoing Units</th>
+                    <th>Customer</th>
+                    <th>Order ID</th>
+                    <th>Address</th>
+                    <th>Date Ordered</th>
+                    <th>Order Status</th>
+                    <th>Order Cost</th>
                   </tr>
                 </thead>
                 <tbody id="invTableBody">

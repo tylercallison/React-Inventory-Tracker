@@ -19,6 +19,7 @@ export const FirebaseProvider = ({ children }) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
+  const [orderData, setOrderData] = React.useState([]);
   const [tickets, setTickets] = React.useState([]);
   const [shipmentData, setShipmentData] = React.useState([]);
 
@@ -156,6 +157,30 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  function getOrderElements() {
+    return new Promise(async (resolve, reject) => {
+      if (userDoc.data().orgId) {
+        console.log("Getting  elements...")
+        const orderDataElements = [];
+        const orderElementsReturn = await getDocs(query(collection(db, "organization", userDoc.data().orgId, "orders"))).catch((e) => {
+          if (e) {
+            handleFirebaseErrors(e);
+            reject('Get order data failed.\n' + JSON.stringify(e))
+          }
+        })
+        console.log(" " + orderElementsReturn.size)
+        orderElementsReturn.forEach((element) => {
+          orderDataElements.push(element.data());
+          // console.log(element.data())
+        });
+        // console.log(troubleTicketsReturn);
+        setOrderData(orderDataElements);
+        resolve(orderDataElements);
+      } else {
+        reject('Get order data failed. User empty')
+      }
+    })
+  }
   /*
 
   ticket = {
@@ -434,6 +459,7 @@ export const FirebaseProvider = ({ children }) => {
     firebaseSignIn,
     getTestShipmentData,
     addInventoryElement,
+    getOrderElements,
     inventoryData,
     getInventoryElements,
     isLoading,
