@@ -175,6 +175,7 @@ export const FirebaseProvider = ({ children }) => {
         if (newTicket) {
           setTickets(old => [...old, newTicket])
           resolve(newTicket);
+          window.location.reload();
         }
         else {
           reject("Failed to add new ticket. Unknown error occured");
