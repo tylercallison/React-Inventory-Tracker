@@ -83,7 +83,6 @@ function NewTicket() {
                                 userReported: "",
                             }
                             )
-                            window.location.reload();
                         }}>Submit</Button>
                     </Form.Group>
                 </Form>
