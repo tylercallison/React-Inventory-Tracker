@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Form, Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { useFirebase } from '../components/FirestoreContext';
+import { FirebaseProvider, useFirebase } from '../components/FirestoreContext';
 import { serverTimestamp } from "firebase/firestore";
 import logo from "../assets/icetracklogo.png"
 
 function NewTicket() {
 
-    const { submitNewTicket, slugify } = useFirebase()
+    const { submitNewTicket, slugify, firebaseSignOut } = useFirebase()
 
     return (
         <div>
@@ -28,6 +28,7 @@ function NewTicket() {
                         </Nav>
                         <Nav>
                             <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
+                            <Nav.Link onClick={(e) => firebaseSignOut()}>Sign Out</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
