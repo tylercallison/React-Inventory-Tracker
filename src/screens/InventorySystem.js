@@ -15,7 +15,7 @@ import Loading from 'react-fullscreen-loading';
 
 export default function InventorySystem() {
 
-  const { getTestInventoryData, addInventoryElement, getInventoryElements, isLoading, unslugify } = useFirebase()
+  const { getTestInventoryData, addInventoryElement, getInventoryElements, isLoading, unslugify, firebaseSignOut } = useFirebase()
 
   // const [rowData, setRowData] = React.useState([]);
   const [rowElements, setRowElements] = React.useState([]);
@@ -121,6 +121,7 @@ export default function InventorySystem() {
             </Nav>
             <Nav>
               <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
+              <Nav.Link onClick={(e) => firebaseSignOut()}>Sign Out</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -12,7 +12,7 @@ import Container from 'react-bootstrap/Container';
 
 
 export default function OrderEntry() {
-     const { getTestOrderEntryData, getTestOrderInfo, getTestBillInfo, getTestShippingInfo } = useFirebase()
+     const { getTestOrderEntryData, getTestOrderInfo, getTestBillInfo, getTestShippingInfo, firebaseSignOut } = useFirebase()
      const [rowElements, setRowElements] = React.useState([])
      const [orderInfo, setOrderInfoElements] = React.useState([])
      const [orderBillingInfo, setOrderBillingInfo] = React.useState([])
@@ -298,6 +298,7 @@ export default function OrderEntry() {
                               </Nav>
                               <Nav>
                                    <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
+                                   <Nav.Link onClick={(e) => firebaseSignOut()}>Sign Out</Nav.Link>
                               </Nav>
                          </Navbar.Collapse>
                     </Container>
