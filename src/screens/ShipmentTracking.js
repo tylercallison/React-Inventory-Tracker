@@ -11,7 +11,7 @@ import logo from "../assets/icetracklogo.png";
 
 export default function ShipmentTracking() {
 
-  const { getTestShipmentData, isLoading, getShipmentElements } = useFirebase()
+  const { getTestShipmentData, isLoading, getShipmentElements, firebaseSignOut } = useFirebase()
 
   // const [rowData, setRowData] = React.useState([]);
   const [rowElements, setRowElements] = React.useState([]);
@@ -83,6 +83,7 @@ export default function ShipmentTracking() {
             </Nav>
             <Nav>
               <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
+              <Nav.Link onClick={(e) => firebaseSignOut()}>Sign Out</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

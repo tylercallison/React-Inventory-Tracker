@@ -11,12 +11,12 @@ function Login() {
     return (
         <div className="container-center-horizontal">
             <div class="login-mario screen">
-                <div class ="flex-col">
+                <div class="flex-col">
                     <p class="text-1 roboto-normal-black-12px">
                         Welcome back!<br />Please log into your account, or create an account.
                     </p>
 
-                        <Form>
+                    <Form>
                         <Form.Group className="email">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control type="email" placeholder="Enter email" id="emailValue" />
@@ -31,7 +31,6 @@ function Login() {
                             var email = document.getElementById("emailValue").value;
                             var pass = document.getElementById("passValue").value
                             firebaseSignIn(email, pass);
-                            window.location.assign("/inventory");
                         }}>
                             Submit
                         </Button>
@@ -48,7 +47,7 @@ function Login() {
                     <p class="text-5 roboto-normal-white-16px">
                         © 2021 Neapolitan Solutions Co. All rights reserved.
                     </p>
-                </div>  
+                </div>
             </div>
         </div>
     );

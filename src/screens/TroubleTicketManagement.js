@@ -7,7 +7,7 @@ import logo from "../assets/icetracklogo.png"
 export default function TroubleTicketManagement() {
 
     let mainCardDisplayed = 0;
-    const { userDoc, getTroubleTickets } = useFirebase();
+    const { userDoc, getTroubleTickets, firebaseSignOut } = useFirebase();
 
 
     const [sidebarElements, setSidebarElements] = React.useState([]);
@@ -143,6 +143,7 @@ export default function TroubleTicketManagement() {
                         </Nav>
                         <Nav>
                             <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
+                            <Nav.Link onClick={(e) => firebaseSignOut()}>Sign Out</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

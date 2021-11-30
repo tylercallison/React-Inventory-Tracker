@@ -1,5 +1,5 @@
 import "../config"
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, updateProfile, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { collection, doc, setDoc, getDoc, getFirestore, onSnapshot, query, addDoc, getDocs, where, increment, updateDoc } from "firebase/firestore";
 
 import React, { useContext, createContext } from 'react';
@@ -45,6 +45,11 @@ export const FirebaseProvider = ({ children }) => {
 
   async function firebaseSignIn(email, password) {
     return await signInWithEmailAndPassword(auth, email, password);
+    window.location.assign("/inventory");
+  }
+
+  async function firebaseSignOut() {
+    return await signOut(auth);
   }
 
   function firebaseRegister(email, password, firstName, lastName, orgId) {
@@ -175,6 +180,7 @@ export const FirebaseProvider = ({ children }) => {
         if (newTicket) {
           setTickets(old => [...old, newTicket])
           resolve(newTicket);
+          window.location.reload();
         }
         else {
           reject("Failed to add new ticket. Unknown error occured");
@@ -463,7 +469,8 @@ export const FirebaseProvider = ({ children }) => {
     getInventoryElements,
     isLoading,
     unslugify,
-    getShipmentElements
+    getShipmentElements,
+    firebaseSignOut,
   }
 
   return (
