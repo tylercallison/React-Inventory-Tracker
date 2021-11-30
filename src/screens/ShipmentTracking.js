@@ -11,25 +11,32 @@ import logo from "../assets/icetracklogo.png";
 
 export default function ShipmentTracking() {
 
-  const { getTestShipmentData, firebaseSignOut } = useFirebase()
+  const { getTestShipmentData, isLoading, getShipmentElements, firebaseSignOut } = useFirebase()
 
   // const [rowData, setRowData] = React.useState([]);
   const [rowElements, setRowElements] = React.useState([]);
   let rows = []
 
   React.useEffect(() => {
-    genAllTableRows(getTestShipmentData(8)) //make sure this number is same in test
-  }, [])
+    // genAllTableRows(getTestInventoryData(5)) //make sure this number is same in test
+    if (!isLoading) {
+      (async function () {
+        const result = await getShipmentElements();
+        console.log(result);
+        genAllTableRows(result);
+      })()
+    }
+  }, [isLoading])
 
   function genAllTableRows(allRowData) {
     allRowData.map((data, key) => {
       rows.push(
         <tr key={key}>
           <td>{data.orderId}</td>
-          <td>{data.customer}</td>
-          <td>{data.orderPlacedTimestamp}</td>
+          <td>{String(data.customer)}</td>
+          <td>{String(data.orderPlacedTimestamp.toDate())}</td>
           <td>{data.status}</td>
-          <td>{data.expectedDeliveryDate}</td>
+          <td>{String(data.expectedDeliveryDate.toDate())}</td>
           <td>{data.address}</td>
           <td>{data.billingAddress}</td>
           <td>{data.truck}</td>
@@ -45,10 +52,10 @@ export default function ShipmentTracking() {
     rows.push(
       <tr>
         <td>{newData.orderId}</td>
-        <td>{newData.customer}</td>
-        <td>{newData.orderPlacedTimestamp}</td>
+        {/* <td>{newData.customer}</td> */}
+        {/* <td>{newData.orderPlacedTimestamp.toDate()}</td> */}
         <td>{newData.status}</td>
-        <td>{newData.expectedDeliveryDate}</td>
+        {/* <td>{newData.expectedDeliveryDate.toDate()}</td> */}
         <td>{newData.address}</td>
         <td>{newData.billingAddress}</td>
         <td>{newData.truck}</td>

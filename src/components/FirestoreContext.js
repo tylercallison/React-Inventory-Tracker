@@ -379,6 +379,31 @@ export const FirebaseProvider = ({ children }) => {
     return data;
   }
 
+  function getShipmentElements() {
+    return new Promise(async (resolve, reject) => {
+      if (userDoc.data().orgId) {
+        console.log("Getting  elements...")
+        const orderDataElements = [];
+        const orderElementsReturn = await getDocs(query(collection(db, "organization", userDoc.data().orgId, "orders"))).catch((e) => {
+          if (e) {
+            handleFirebaseErrors(e);
+            reject('Get order data failed.\n' + JSON.stringify(e))
+          }
+        })
+        console.log(" " + orderElementsReturn.size)
+        orderElementsReturn.forEach((element) => {
+          orderDataElements.push(element.data());
+          // console.log(element.data())
+        });
+        // console.log(troubleTicketsReturn);
+        setShipmentData(orderDataElements);
+        resolve(orderDataElements);
+      } else {
+        reject('Get order data failed. User empty')
+      }
+    })
+  }
+
   function getUserRole(userId) {
     return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
   }
@@ -444,6 +469,7 @@ export const FirebaseProvider = ({ children }) => {
     getInventoryElements,
     isLoading,
     unslugify,
+    getShipmentElements,
     firebaseSignOut,
   }
 
