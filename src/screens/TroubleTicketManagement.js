@@ -1,13 +1,13 @@
 import React from "react";
-import { Card, Container, Button, Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Card, Container, Button, Navbar, Nav } from "react-bootstrap";
 import '../styles/TroubleTicketManagement.css';
 import { useFirebase } from '../components/FirestoreContext';
 import logo from "../assets/icetracklogo.png"
+import Loading from 'react-fullscreen-loading';
 
 export default function TroubleTicketManagement() {
 
-    let mainCardDisplayed = 0;
-    const { userDoc, getTroubleTickets, firebaseSignOut } = useFirebase();
+    const { getTroubleTickets, firebaseSignOut, isLoading } = useFirebase();
 
 
     const [sidebarElements, setSidebarElements] = React.useState([]);
@@ -19,41 +19,10 @@ export default function TroubleTicketManagement() {
         # of problems reported, average time to solve problems, average # of new problems 
         per day, and average # of problems worked on per day.
         */
+        window.print();
     }
 
     React.useEffect(() => {
-        // let issues = [];
-        // for(let i = 0; i < 5; i++){
-        //     issues.push({
-        //         id: i,
-        //         associatedOrder: i,
-        //         customer: "Bob",
-        //         description: "Missing inv, Bob needs his f**king vanilla ice cream",
-        //         issueName: "Inventory Missing",
-        //         problemStatus: "unresolved",
-        //         problemType: "major",
-        //         reportTimestamp: "Nov 1st",
-        //         resolutionDescription: "not resolved yet",
-        //         resolutionTimestamp: "",
-        //         userReported: "Cole",
-        //     })
-        // }
-        // for(let i = 0; i < 5; i++){
-        //     issues.push({
-        //         id: i+10,
-        //         associatedOrder: i+10,
-        //         customer: "George",
-        //         description: "Customer information not found",
-        //         issueName: "Error connecting order to customer",
-        //         problemStatus: "unresolved",
-        //         problemType: "major",
-        //         reportTimestamp: "Nov 3rd",
-        //         resolutionDescription: "not resolved yet",
-        //         resolutionTimestamp: "",
-        //         userReported: "Tyler",
-        //     })
-        // }
-
         (async function () {
             const returnTroubleTickets = await getTroubleTickets("example");
             const sidebarElements = genSideBar(returnTroubleTickets);
@@ -64,6 +33,7 @@ export default function TroubleTicketManagement() {
         })();
     }, [])
 
+    // generates the sidebar with all the trouble ticket data within the database
     function genSideBar(issueList) {
         let cards = [];
         let cardData = [];
@@ -72,14 +42,12 @@ export default function TroubleTicketManagement() {
             issueList.forEach(doc => {
                 const currDoc = doc.data();
                 cardData.push(currDoc);
-                // console.log(currDoc.reportTimestamp.toDate())
                 cards.push(
                     <div onClick={(element) => genMainCard(currDoc)}>
                         <Card border='info' className='TicketCard'>
                             <Card.Body>
                                 <Card.Title>{currDoc.issueName}</Card.Title>
                                 <Card.Subtitle className='mb-2 text-muted'>{String(currDoc.reportTimestamp.toDate())}</Card.Subtitle>
-                                {/* <Card.Text>{JSON.stringify(currDoc.userReported)}</Card.Text> */}
                                 <Card.Text>{currDoc.problemType}</Card.Text>
                             </Card.Body>
                         </Card>
@@ -92,6 +60,7 @@ export default function TroubleTicketManagement() {
         return cardData;
     }
 
+    // An on click function, when called the ticket clicked is then generated as the main card on right of screen
     function genMainCard(iss) {
         let mainIssue = {
             associatedOrder: iss.associatedOrder,
@@ -107,7 +76,7 @@ export default function TroubleTicketManagement() {
         };
         console.log(mainIssue);
         let mainCard = (
-            <Card>
+            <Card style={{ marginTop: 10 }}>
                 <Card.Header>
                     <Card.Title>{mainIssue.issueName}</Card.Title>
                     <Card.Subtitle className='text-muted'>Date Reported: {mainIssue.reportTimestamp}</Card.Subtitle>
@@ -117,14 +86,14 @@ export default function TroubleTicketManagement() {
                     <Card.Text>{mainIssue.description}</Card.Text>
                     {mainIssue.resolutionDescription ? <Card.Text>Test Resolution</Card.Text> : null}
                 </Card.Body>
-                <Button style={{}}>Generate Report</Button>
+                <Button style={{}} onClick={() => genReport()}>Generate Report</Button>
             </Card>
         )
         setMainElement(mainCard);
     }
 
     return (
-        <div>
+        <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
                 <Container fluid>
                     <Navbar.Brand href="#home"><img src={logo} width="100px" /></Navbar.Brand>
@@ -135,11 +104,6 @@ export default function TroubleTicketManagement() {
                             <Nav.Link href="/orderentry">Order Entry</Nav.Link>
                             <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
                             <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
-
-                            {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
-                            </NavDropdown> */}
                         </Nav>
                         <Nav>
                             <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
@@ -148,6 +112,7 @@ export default function TroubleTicketManagement() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <Loading loading={isLoading} background="white" loaderColor="#3498db" />
             <div className='IssueList' style={{ height: window.innerHeight, overflowY: 'scroll' }}>
                 <Container>
                     {sidebarElements}
@@ -156,6 +121,6 @@ export default function TroubleTicketManagement() {
             <div className='CurrentIssue'>
                 {mainElement}
             </div>
-        </div>
+        </>
     );
 }

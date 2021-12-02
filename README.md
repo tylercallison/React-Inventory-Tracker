@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# Ice Track - Neapolitan Solutions
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Please run `npm install` to install all necessary dependecies and then run `npm start` to start local web server.\
+Live website available at [https://ice-track-d3065.web.app/](https://ice-track-d3065.web.app/)
 
 ## Available Scripts
 

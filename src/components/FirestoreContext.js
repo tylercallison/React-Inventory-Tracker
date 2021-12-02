@@ -17,11 +17,16 @@ export const FirebaseProvider = ({ children }) => {
   const [userDoc, setUserDoc] = React.useState();
   const [orgDoc, setOrgDoc] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
-  const [issueData, setIssueData] = React.useState([]);
   const [inventoryData, setInventoryData] = React.useState([]);
   const [tickets, setTickets] = React.useState([]);
   const [shipmentData, setShipmentData] = React.useState([]);
 
+  /*
+  * Slugify given string to ensure reliable input
+  *
+  * Params: string to convert to slug
+  * Returns: "slug" version of the given string
+  */
   function slugify(string) {
     return string
       .toString()
@@ -34,6 +39,12 @@ export const FirebaseProvider = ({ children }) => {
       .replace(/-+$/, "");
   }
 
+  /*
+  * Unslugify given string to ensure reliable ouptput
+  *
+  * Params: string (slug) to convert to source string
+  * Returns: "unsluged" version of the given string to generate origional source
+  */
   function unslugify(slug) {
     var words = slug.split('-');
     for (var i = 0; i < words.length; i++) {
@@ -43,15 +54,32 @@ export const FirebaseProvider = ({ children }) => {
     return words.join(' ');
   }
 
+  /*
+  * Wrapper for Firebase sign in to enable additonal features (if needed)
+  *
+  * Params: string (email), string (password) for user authentication
+  * Returns: none
+  */
   async function firebaseSignIn(email, password) {
-    return await signInWithEmailAndPassword(auth, email, password);
-    window.location.assign("/inventory");
+    await signInWithEmailAndPassword(auth, email, password);
   }
 
+  /*
+  * Wrapper for Firebase sign out to enable additonal code (if needed)
+  *
+  * Params: none
+  * Returns: none
+  */
   async function firebaseSignOut() {
-    return await signOut(auth);
+    await signOut(auth);
   }
 
+  /*
+  * Wrapper for Firebase register to ensure accurate registration data
+  *
+  * Params: string (email), string (password), string (firstName), string (lastName), string (orgId) for user registration
+  * Returns: Promise of response from firebase or error message
+  */
   function firebaseRegister(email, password, firstName, lastName, orgId) {
     return new Promise((resolve, reject) => {
       if (email === "" || password === "" || firstName === "" || lastName === "" || orgId === "") {
@@ -102,6 +130,12 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  /*
+  * Add a product to the inventory
+  *
+  * Params: string for flavor, int for size, int for units, and double for price
+  * Returns: Promise of true or false 
+  */
   function addInventoryElement(flavor, size, units, price) {
     return new Promise(async (resolve, reject) => {
       if (userDoc) {
@@ -136,6 +170,12 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  /*
+  * Gets the inventory elements and pushes
+  * them to an array and sets the array.
+  * 
+  * Returns: Promise of the inventory elements
+  */
   function getInventoryElements() {
     return new Promise(async (resolve, reject) => {
       if (userDoc.data().orgId) {
@@ -150,9 +190,7 @@ export const FirebaseProvider = ({ children }) => {
         console.log("Size: " + inventoryElementsReturn.size)
         inventoryElementsReturn.forEach((element) => {
           inventoryDataElements.push(element.data());
-          // console.log(element.data())
         });
-        // console.log(troubleTicketsReturn);
         setInventoryData(inventoryDataElements);
         resolve(inventoryDataElements);
       } else {
@@ -161,21 +199,14 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
-  /*
-
-  ticket = {
-    order: String
-    customer
-    description
-    problemType
-  }
-
+  /* 
+  * Handles a submit of a new ticket 
+  * 
+  * Returns: Promise of success of a new ticket.
   */
-
   function submitNewTicket(user, ticket) {
     return new Promise(async (resolve, reject) => {
       if (user) {
-        // TODO: Add type checking
         const newTicket = await addDoc(collection(db, "organization", user.orgId, "tickets"), ticket);
         if (newTicket) {
           setTickets(old => [...old, newTicket])
@@ -191,12 +222,16 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  /*
+  * Watches the user data and for changes
+  *
+  * Params: user object
+  * Returns: Promise of user data live updated
+  */
   function watchUserData(user) {
     return new Promise((resolve, reject) => {
       if (user) {
         const userDocumentListener = onSnapshot(doc(db, "users", user.uid), (userDocument) => {
-          // console.log("Watching user doc...")
-          // const userData = userDocument.data()
           if (userDocument) {
             console.log("Updating user doc...")
             setUserDoc(userDocument)
@@ -217,6 +252,12 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  /*
+  * Gets the user data
+  *
+  * Params: user object
+  * Returns: promise of user data
+  */
   function getUserData(user) {
     return new Promise(async (resolve, reject) => {
       if (user) {
@@ -242,24 +283,28 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+
+  /*
+  * Handles fetching trouble ticket data from the Firestore database
+  *
+  * Params: orgID
+  * Returns: promise of trouble ticket data
+  */
   function getTroubleTickets(orgId, lowerTimestamp = 0, upperTimestamp = 0) {
     return new Promise(async (resolve, reject) => {
       if (orgId) {
         console.log("Getting trouble tickets...")
         if (lowerTimestamp && upperTimestamp) {
           const troubleTicketsReturn = await getDocs(query(collection(db, "organization", orgId, "tickets"), where("reportTimestamp", ">=", lowerTimestamp), where("reportTimestamp", "<=", upperTimestamp)))
-          // console.log("Size: " + troubleTicketsReturn.size)
           troubleTicketsReturn.forEach((ticket) => {
             console.log(ticket)
           });
           resolve(troubleTicketsReturn);
         } else {
           const troubleTicketsReturn = await getDocs(query(collection(db, "organization", orgId, "tickets")))
-          // console.log("Size: " + troubleTicketsReturn.size)
           troubleTicketsReturn.forEach((ticket) => {
             console.log(ticket.data())
           });
-          // console.log(troubleTicketsReturn);
           resolve(troubleTicketsReturn);
         }
       } else {
@@ -268,6 +313,12 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  /*
+  * Watches for organization data change and updates variables
+  *
+  * Params: string orgId
+  * Returns: Promise of organization data updated live
+  */
   function watchOrgData(orgId) {
     return new Promise((resolve, reject) => {
       console.log("Attempting to get org data: " + JSON.stringify(orgId))
@@ -293,6 +344,56 @@ export const FirebaseProvider = ({ children }) => {
     })
   }
 
+  /*
+  * Gets the shipment elements
+  *
+  * Returns: A promise of the shipment elements
+  */
+  function getShipmentElements() {
+    return new Promise(async (resolve, reject) => {
+      if (userDoc.data().orgId) {
+        console.log("Getting  elements...")
+        const orderDataElements = [];
+        const orderElementsReturn = await getDocs(query(collection(db, "organization", userDoc.data().orgId, "orders"))).catch((e) => {
+          if (e) {
+            handleFirebaseErrors(e);
+            reject('Get order data failed.\n' + JSON.stringify(e))
+          }
+        })
+        console.log(" " + orderElementsReturn.size)
+        orderElementsReturn.forEach((element) => {
+          orderDataElements.push(element.data());
+        });
+        setShipmentData(orderDataElements);
+        resolve(orderDataElements);
+      } else {
+        reject('Get order data failed. User empty')
+      }
+    })
+  }
+
+  /*
+  * Gets the role corresponding to the input userID
+  *
+  * Params: userID
+  * Returns: role of input userID
+  */
+  function getUserRole(userId) {
+    return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
+  }
+
+  /*
+  * Wrapper to handle Firebase errors and sisplay them in an alert style
+  *
+  * Params: firebase.error (error) the error to handle
+  * Returns: none
+  */
+  function handleFirebaseErrors(error) {
+    alert(error)
+    console.log(error)
+  }
+
+  // ====================== START VISUAL TESTS WITHOUT ANY FIRESTORE DATA (SAMPLE DATA) =============================
   function getTestOrderEntryData(numElements) {
     const data = []
     for (let i = 0; i < numElements; i++) {
@@ -378,40 +479,7 @@ export const FirebaseProvider = ({ children }) => {
     }
     return data;
   }
-
-  function getShipmentElements() {
-    return new Promise(async (resolve, reject) => {
-      if (userDoc.data().orgId) {
-        console.log("Getting  elements...")
-        const orderDataElements = [];
-        const orderElementsReturn = await getDocs(query(collection(db, "organization", userDoc.data().orgId, "orders"))).catch((e) => {
-          if (e) {
-            handleFirebaseErrors(e);
-            reject('Get order data failed.\n' + JSON.stringify(e))
-          }
-        })
-        console.log(" " + orderElementsReturn.size)
-        orderElementsReturn.forEach((element) => {
-          orderDataElements.push(element.data());
-          // console.log(element.data())
-        });
-        // console.log(troubleTicketsReturn);
-        setShipmentData(orderDataElements);
-        resolve(orderDataElements);
-      } else {
-        reject('Get order data failed. User empty')
-      }
-    })
-  }
-
-  function getUserRole(userId) {
-    return orgDoc?.data()?.roles[userId] ? orgDoc?.data()?.roles[userId] : "user";
-  }
-
-  function handleFirebaseErrors(error) {
-    alert(error)
-    console.log(error)
-  }
+  // ====================== END VISUAL TESTS WITHOUT ANY FIRESTORE DATA (SAMPLE DATA) =============================
 
   React.useEffect(() => {
     const unsubscribers = [];
@@ -420,7 +488,6 @@ export const FirebaseProvider = ({ children }) => {
       setIsLoading(true);
       if (user) {
         if (window.location.pathname === "/login" || window.location.pathname === "/createAccount") {
-          // console.log(window.location.pathname)
           window.location.assign("/inventory");
         }
         const userDataReturn = await watchUserData(user);
@@ -435,7 +502,6 @@ export const FirebaseProvider = ({ children }) => {
       } else {
         setIsLoading(false);
         if (window.location.pathname !== "/login" && window.location.pathname !== "/createAccount") {
-          // console.log(window.location.pathname)
           window.location.assign("/login");
         }
       }
@@ -446,9 +512,9 @@ export const FirebaseProvider = ({ children }) => {
         unsubscriber();
       })
     }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Export necessary functions and variables to be imported on other screens
   const firebaseData = {
     currentUser,
     firebaseRegister,
