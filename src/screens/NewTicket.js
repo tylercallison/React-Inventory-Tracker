@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Form, Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { FirebaseProvider, useFirebase } from '../components/FirestoreContext';
+import { Button, Form, Container, Navbar, Nav } from 'react-bootstrap';
+import { useFirebase } from '../components/FirestoreContext';
 import { serverTimestamp } from "firebase/firestore";
 import logo from "../assets/icetracklogo.png"
 
@@ -20,11 +20,6 @@ function NewTicket() {
                             <Nav.Link href="/orderentry">Order Entry</Nav.Link>
                             <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
                             <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
-
-                            {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
-                            </NavDropdown> */}
                         </Nav>
                         <Nav>
                             <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>

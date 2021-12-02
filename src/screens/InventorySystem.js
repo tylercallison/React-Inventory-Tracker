@@ -5,7 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import React from "react"
 import '../styles/App.css';
 import '../styles/InventorySystem.css';
@@ -15,17 +14,13 @@ import Loading from 'react-fullscreen-loading';
 
 export default function InventorySystem() {
 
-  const { getTestInventoryData, addInventoryElement, getInventoryElements, isLoading, unslugify, firebaseSignOut } = useFirebase()
+  const { addInventoryElement, getInventoryElements, isLoading, unslugify, firebaseSignOut } = useFirebase()
 
-  // const [rowData, setRowData] = React.useState([]);
   const [rowElements, setRowElements] = React.useState([]);
   const [inventoryModalShow, setInventoryModalShow] = React.useState(false);
-  // const [fullscreen, setFullscreen] = React.useState(true);
-  // const [show, setShow] = React.useState(false);
   let rows = []
 
   React.useEffect(() => {
-    // genAllTableRows(getTestInventoryData(5)) //make sure this number is same in test
     if (!isLoading) {
       (async function () {
         const result = await getInventoryElements();
@@ -35,11 +30,6 @@ export default function InventorySystem() {
     }
   }, [isLoading])
 
-  // function handleShow() {
-  //   setFullscreen(true);
-  //   setShow(true);
-  // }
-
   function genAllTableRows(allRowData) {
     allRowData.map((data, key) => {
       const sizesTDRow = []
@@ -48,7 +38,6 @@ export default function InventorySystem() {
       const outgoingTDRow = []
 
       const keys = data.prices ? Object.keys(data.prices) : null
-      // console.log(keys)
 
       for (let i = 0; i < keys?.length; i++) {
         sizesTDRow.push(
@@ -73,7 +62,7 @@ export default function InventorySystem() {
         );
       }
       rows.push(
-        <tr key={data.flavor} /*onClick={() => handleShow()}*/>
+        <tr key={data.flavor}>
           <td>{unslugify(data.flavor)}</td>
           <td>{sizesTDRow}</td>
           <td>{unitsTDRow}</td>
@@ -82,22 +71,6 @@ export default function InventorySystem() {
         </tr>
       )
     })
-    setRowElements(rows);
-  }
-
-  function addTableRow(newData) {
-
-    // TODO: add key prop of doc ID to tr element
-
-    rows.push(
-      <tr /*onClick={() => handleShow()}*/>
-        <td>{newData.id}</td>
-        <td>{newData.title}</td>
-        <td>{newData.size}</td>
-        <td>{newData.units}</td>
-        <td>{newData.price}</td>
-        <td>{newData.outgoingUnits}</td>
-      </tr>)
     setRowElements(rows);
   }
 
@@ -113,11 +86,6 @@ export default function InventorySystem() {
               <Nav.Link href="/orderentry">Order Entry</Nav.Link>
               <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
               <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
-
-              {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
-                            </NavDropdown> */}
             </Nav>
             <Nav>
               <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
@@ -156,7 +124,7 @@ export default function InventorySystem() {
                     <Form.Control type="number" placeholder="12" min="0" id="unitsInput" required />
                   </Form.Group>
                   <Form.Group className="mb-3" >
-                    <Form.Label>New Price per Unit (Leave blank if unchanged)</Form.Label>
+                    <Form.Label>Price per Unit</Form.Label>
                     <Form.Control type="number" placeholder="12" min="0" id="priceInput" required />
                   </Form.Group>
                 </Form>
@@ -174,13 +142,6 @@ export default function InventorySystem() {
                 <Button variant="secondary" onClick={() => setInventoryModalShow(false)}>Close</Button>
               </Modal.Footer>
             </Modal>
-
-            {/* <Modal show={show} onHide={() => setShow(false)}>
-              <Modal.Header closeButton>
-                <Modal.Title>Modal</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>Modal body content</Modal.Body>
-            </Modal> */}
 
             <div id="InventorySystem" style={{ flex: 1 }}>
               <div className="row">
