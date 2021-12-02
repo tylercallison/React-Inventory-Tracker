@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import * as ReactBootStrap from "react-bootstrap"
-import GridLayout from 'react-grid-layout';
 import 'react-datepicker/dist/react-datepicker.css'
 import DatePicker from '../components/DatePicker.js'
 import { useFirebase } from '../components/FirestoreContext';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import logo from "../assets/icetracklogo.png"
 import Container from 'react-bootstrap/Container';
 
@@ -45,10 +43,9 @@ export default function OrderEntry() {
                          </td>
                          <td>
                               <select class="form-control">
-                                   <option>1 pt</option>
-                                   <option>2 pt</option>
-                                   <option>1 qt</option>
-                                   <option>2 qt</option>
+                                   <option>pint</option>
+                                   <option>quart</option>
+                                   <option>gallon</option>
                               </select>
                          </td>
                          <td>
@@ -238,43 +235,6 @@ export default function OrderEntry() {
                )
           })
           setOrderShippingInfo(orderShippingCard)
-     }
-
-
-
-     const layout = [
-          { i: 'orderTable', x: 0, y: 0, w: 1, h: 2 },
-     ]
-
-     const renderOrder = (order, index) => {
-          return (
-               <tr key={index}>
-                    <td>{order.lineNumber}</td>
-                    <td>
-                         <input list="item_names" name="input_normal" defaultValue={order.itemName} />
-                         <datalist id="item_names">
-                              <option value="Vanilla" />
-                              <option value="Chocolate" />
-                              <option value="Strawberry" />
-                         </datalist>
-                    </td>
-                    <td>
-                         <select class="form-control">
-                              <option>1 pt</option>
-                              <option>2 pt</option>
-                              <option>1 qt</option>
-                              <option>2 qt</option>
-                         </select>
-                    </td>
-                    <td>
-                         <input defaultValue={order.quantity} />
-                    </td>
-                    <td>
-                         <DatePicker initialDate={order.estDelivery} />
-                    </td>
-                    <td>{order.lineTotal}</td>
-               </tr>
-          )
      }
 
      return (

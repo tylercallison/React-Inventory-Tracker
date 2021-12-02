@@ -2,34 +2,38 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import React from "react"
 import '../styles/App.css';
 import { useFirebase } from '../components/FirestoreContext';
 import logo from "../assets/icetracklogo.png";
+import Loading from 'react-fullscreen-loading';
 
 export default function ShipmentTracking() {
-
-  const { getTestShipmentData, firebaseSignOut } = useFirebase()
-
-  // const [rowData, setRowData] = React.useState([]);
+  // get the data from firebase, and call the function to generate the table of data
+  const { isLoading, getShipmentElements, firebaseSignOut } = useFirebase()
   const [rowElements, setRowElements] = React.useState([]);
   let rows = []
-
   React.useEffect(() => {
-    genAllTableRows(getTestShipmentData(8)) //make sure this number is same in test
-  }, [])
+    if (!isLoading) {
+      (async function () {
+        const result = await getShipmentElements();
+        console.log(result);
+        genAllTableRows(result);
+      })()
+    }
+  }, [isLoading])
 
+  //using data from firebase, organize it into a table with keys pertaining to each data type 
   function genAllTableRows(allRowData) {
     allRowData.map((data, key) => {
       rows.push(
         <tr key={key}>
           <td>{data.orderId}</td>
-          <td>{data.customer}</td>
-          <td>{data.orderPlacedTimestamp}</td>
+          <td>{String(data.customer)}</td>
+          <td>{String(data.orderPlacedTimestamp.toDate())}</td>
           <td>{data.status}</td>
-          <td>{data.expectedDeliveryDate}</td>
+          <td>{String(data.expectedDeliveryDate.toDate())}</td>
           <td>{data.address}</td>
           <td>{data.billingAddress}</td>
           <td>{data.truck}</td>
@@ -38,25 +42,9 @@ export default function ShipmentTracking() {
     setRowElements(rows);
   }
 
-  function addTableRow(newData) {
-
-    // TODO: add key prop of doc ID to tr element
-
-    rows.push(
-      <tr>
-        <td>{newData.orderId}</td>
-        <td>{newData.customer}</td>
-        <td>{newData.orderPlacedTimestamp}</td>
-        <td>{newData.status}</td>
-        <td>{newData.expectedDeliveryDate}</td>
-        <td>{newData.address}</td>
-        <td>{newData.billingAddress}</td>
-        <td>{newData.truck}</td>
-      </tr>)
-    setRowElements(rows);
-  }
-
   return (
+    // design/layout of the shipment tracking screen, with the navbar followed by the title and add order button (currently non-functional),
+    // as well as the table with data generated from firebase
     <div id="ShipmentTracking" style={{ flex: 1 }}>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
         <Container fluid>
@@ -68,11 +56,6 @@ export default function ShipmentTracking() {
               <Nav.Link href="/orderentry">Order Entry</Nav.Link>
               <Nav.Link href="/shipmenttracking">Shipment Tracking</Nav.Link>
               <Nav.Link href="/troubleticketmanagement">Trouble Ticket Management</Nav.Link>
-
-              {/* <NavDropdown title="Trouble Tickets" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Ticket Entry</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Ticket Management</NavDropdown.Item>
-                            </NavDropdown> */}
             </Nav>
             <Nav>
               <Nav.Link href="newticket">New Trouble Ticket</Nav.Link>
@@ -82,13 +65,13 @@ export default function ShipmentTracking() {
         </Container>
       </Navbar>
       <Container fluid>
+        <Loading loading={isLoading} background="white" loaderColor="#3498db" />
         <div className="row">
           <div className="col d-flex">
             <span style={{ fontSize: 45, fontWeight: 500 }} >Shipments Overview</span>
           </div>
           <div className="col d-flex flex-row-reverse">
-            <Button style={{ margin: 10 }} variant="info">Add Order</Button>
-            <Button style={{ margin: 10 }} variant="info">Add Shipment</Button>
+            <Button style={{ margin: 10 }} onClick={() => window.location.href = "/orderentry"} variant="info">Add Order</Button>
           </div>
         </div>
 
