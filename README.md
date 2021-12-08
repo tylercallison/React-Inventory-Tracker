@@ -1,6 +1,8 @@
 # Ice Track - Neapolitan Solutions
+1. Make sure you have NodeJS installed (Prefereably v16 as this is what the code was tested on).
+2. Run `npm install` to install all necessary dependecies
+3. Run `npm start` to start local web server.
 
-Please run `npm install` to install all necessary dependecies and then run `npm start` to start local web server.\
 Live website available at [https://ice-track-d3065.web.app/](https://ice-track-d3065.web.app/)
 
 ## Available Scripts
